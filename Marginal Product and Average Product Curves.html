@@ -228,11 +228,11 @@
         } else if (L < CONFIG.intersectPoint) {
             tStr = "MP > AP";
             if (isAtMPPeak) b1Str = "MP is at its maximum.";
-            else if (mpSlope > 0) b1Str = "MP is rising (更陡峭) and above AP.";
-            else b1Str = "MP is falling (更平坦) but still above AP.";
+            else if (mpSlope > 0) b1Str = "MP is rising and above AP.";
+            else b1Str = "MP is falling but still above AP.";
             b2Txt = "up"; b2Col = CONFIG.colors.stage1; strip.setAttribute('fill', CONFIG.colors.stage1);
         } else {
-            tStr = "MP < AP"; b1Str = "MP is falling (更平坦) and below AP."; b2Txt = "down"; b2Col = CONFIG.colors.stage2; strip.setAttribute('fill', CONFIG.colors.stage2);
+            tStr = "MP < AP"; b1Str = "MP is falling and below AP."; b2Txt = "down"; b2Col = CONFIG.colors.stage2; strip.setAttribute('fill', CONFIG.colors.stage2);
         }
 
         vTitle.textContent = tStr; vBody1.textContent = b1Str;

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AP Econ Graphs</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Outfit:wght@300;400;500&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:#fff; --ink:#0d0d0d; --mid:#666; --faint:#f4f4f4;
+      --line:#e8e8e8; --blue:#0057ff; --blue-dim:#e6eeff;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--ink);font-family:'Outfit','Noto Sans SC',-apple-system,sans-serif;font-weight:300;line-height:1.7;-webkit-font-smoothing:antialiased}
+
+    /* TOPBAR */
+    .topbar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(1rem,4vw,2rem);height:56px;border-bottom:1px solid var(--line);background:rgba(255,255,255,0.95);backdrop-filter:blur(12px)}
+    .logo{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(.85rem,2vw,1rem);letter-spacing:-.02em;color:var(--ink);text-decoration:none}
+    .logo span{color:var(--blue)}
+    .lang-toggle{display:flex;gap:4px}
+    .lang-btn{background:none;border:1px solid var(--line);border-radius:99px;padding:.3rem .85rem;font-size:.78rem;font-family:inherit;cursor:pointer;color:var(--mid);transition:all .18s;font-weight:400}
+    .lang-btn.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+    /* HERO */
+    .hero-wrap{border-bottom:1px solid var(--line)}
+    .hero{max-width:1040px;margin:0 auto;padding:clamp(3rem,8vw,7rem) clamp(1rem,4vw,2rem) clamp(2.5rem,6vw,5rem);display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:end}
+    .eyebrow{font-size:clamp(.65rem,1.5vw,.72rem);letter-spacing:.2em;text-transform:uppercase;color:var(--mid);margin-bottom:1.2rem;font-weight:500}
+    h1{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2.8rem,9vw,6.5rem);line-height:.95;letter-spacing:-.04em}
+    h1 .accent{color:var(--blue)}
+    .hero-sub{margin-top:1.6rem;font-size:clamp(.92rem,2vw,1.05rem);color:var(--mid);max-width:480px;line-height:1.65}
+    .hero-cta{margin-top:2.2rem;display:flex;gap:.75rem;flex-wrap:wrap}
+    .btn-primary{display:inline-flex;align-items:center;background:var(--ink);color:#fff;text-decoration:none;font-size:.88rem;font-weight:500;padding:.75rem 1.5rem;border-radius:4px;transition:background .18s}
+    .btn-primary:hover{background:var(--blue)}
+    .btn-ghost{display:inline-flex;align-items:center;background:none;color:var(--ink);border:1px solid var(--line);text-decoration:none;font-size:.88rem;font-weight:400;padding:.75rem 1.5rem;border-radius:4px;transition:border-color .18s}
+    .btn-ghost:hover{border-color:var(--ink)}
+    .hero-deco{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(5rem,15vw,12rem);color:var(--faint);line-height:1;letter-spacing:-.05em;user-select:none;align-self:start;padding-top:1.5rem}
+
+    /* SECTIONS */
+    .section{max-width:1040px;margin:0 auto;padding:clamp(3rem,7vw,5rem) clamp(1rem,4vw,2rem)}
+    .section-border{border-top:1px solid var(--line)}
+    .sec-header{display:flex;align-items:baseline;gap:1rem;margin-bottom:2.5rem;flex-wrap:wrap}
+    .sec-num{font-family:'Syne',sans-serif;font-size:.75rem;color:var(--blue);font-weight:700;letter-spacing:.12em}
+    .sec-title{font-family:'Syne',sans-serif;font-weight:700;font-size:clamp(1.3rem,3.5vw,2rem);letter-spacing:-.02em}
+
+    /* ABOUT */
+    .about-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:clamp(1.5rem,4vw,3rem)}
+    .about-tag{display:inline-block;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;background:var(--blue-dim);color:var(--blue);padding:.2rem .6rem;border-radius:3px;font-weight:500;margin-bottom:.9rem}
+    .about-grid p{color:#3a3a3a;font-size:.95rem;margin-bottom:.85rem}
+    .about-grid p:last-child{margin-bottom:0}
+
+    /* FOLDERS */
+    .folder-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+    .folder-card{background:var(--bg);padding:clamp(1.5rem,4vw,2.2rem) clamp(1.2rem,3vw,2rem);text-decoration:none;color:var(--ink);display:flex;flex-direction:column;gap:.5rem;transition:background .18s;min-height:180px}
+    .folder-card:hover,.folder-card:active{background:var(--faint)}
+    .folder-num{font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;color:var(--line);line-height:1;margin-bottom:.2rem}
+    .folder-card h3{font-family:'Syne',sans-serif;font-size:clamp(.95rem,2vw,1.05rem);font-weight:700;letter-spacing:-.01em}
+    .folder-card p{font-size:.85rem;color:var(--mid);margin:0;line-height:1.5}
+    .folder-arrow{margin-top:auto;padding-top:1.2rem;font-size:.8rem;color:var(--blue);font-weight:500}
+
+    /* CREDIT */
+    .credit-card{border:1px solid var(--line);border-radius:8px;padding:clamp(1.5rem,4vw,2rem) clamp(1.2rem,3vw,2.2rem);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1.5rem}
+    .credit-left{flex:1;min-width:min(100%,240px)}
+    .credit-kicker{font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--mid);margin-bottom:.4rem;font-weight:500}
+    .credit-name{font-family:'Syne',sans-serif;font-size:clamp(1.1rem,2.5vw,1.3rem);font-weight:700;letter-spacing:-.02em;margin-bottom:.5rem}
+    .credit-desc{font-size:.88rem;color:var(--mid);line-height:1.6}
+    .credit-link{display:inline-flex;align-items:center;background:var(--ink);color:#fff;text-decoration:none;font-size:.83rem;font-weight:500;padding:.7rem 1.3rem;border-radius:4px;white-space:nowrap;transition:background .18s}
+    .credit-link:hover{background:var(--blue)}
+
+    /* CONTACT */
+    .contact-strip{background:var(--ink);border-radius:8px;padding:clamp(1.8rem,4vw,2.5rem) clamp(1.2rem,3vw,2.2rem);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1.5rem}
+    .contact-left{flex:1;min-width:min(100%,240px)}
+    .contact-strip h3{font-family:'Syne',sans-serif;font-size:clamp(1.1rem,2.5vw,1.3rem);font-weight:700;color:#fff;letter-spacing:-.02em;margin-bottom:.35rem}
+    .contact-strip p{font-size:.88rem;color:rgba(255,255,255,.5);margin:0}
+    .contact-btn{display:inline-flex;align-items:center;background:var(--blue);color:#fff;text-decoration:none;font-size:.83rem;font-weight:500;padding:.7rem 1.3rem;border-radius:4px;white-space:nowrap;transition:opacity .18s}
+    .contact-btn:hover{opacity:.85}
+
+    /* FOOTER */
+    .footer-wrap{border-top:1px solid var(--line)}
+    footer{max-width:1040px;margin:0 auto;padding:clamp(1.2rem,3vw,1.5rem) clamp(1rem,4vw,2rem);display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.5rem;font-size:.78rem;color:var(--mid)}
+    footer a{color:var(--mid);text-decoration:none}
+    footer a:hover{color:var(--ink)}
+
+    @media(max-width:600px){
+      .hero{grid-template-columns:1fr}
+      .hero-deco{display:none}
+    }
+  </style>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="logo" href="#"><span>AP</span>·Econ·Graphs</a>
+  <div class="lang-toggle">
+    <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" id="btn-zh" onclick="setLang('zh')">中文</button>
+  </div>
+</header>
+
+<div class="hero-wrap">
+  <div class="hero">
+    <div>
+      <div class="eyebrow" data-i18n="eyebrow"></div>
+      <h1>
+        <span data-i18n="h1a"></span><br>
+        <span data-i18n="h1b"></span><br>
+        <span class="accent" data-i18n="h1c"></span>
+      </h1>
+      <p class="hero-sub" data-i18n="heroSub"></p>
+      <div class="hero-cta">
+        <a class="btn-primary" href="#graphs" data-i18n="ctaGraphs"></a>
+        <a class="btn-ghost" href="https://github.com/Raylaoshi/AP.Econ.Graphs" target="_blank">GitHub ↗</a>
+      </div>
+    </div>
+    <div class="hero-deco" aria-hidden="true">∂</div>
+  </div>
+</div>
+
+<div class="section-border">
+  <section class="section" id="about">
+    <div class="sec-header">
+      <span class="sec-num">01</span>
+      <h2 class="sec-title" data-i18n="aboutTitle"></h2>
+    </div>
+    <div class="about-grid">
+      <div>
+        <div class="about-tag" data-i18n="tag1"></div>
+        <p data-i18n="about1a"></p>
+        <p data-i18n="about1b"></p>
+      </div>
+      <div>
+        <div class="about-tag" data-i18n="tag2"></div>
+        <p data-i18n="about2a"></p>
+        <p data-i18n="about2b"></p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="section-border">
+  <section class="section" id="graphs">
+    <div class="sec-header">
+      <span class="sec-num">02</span>
+      <h2 class="sec-title" data-i18n="graphsTitle"></h2>
+    </div>
+    <div class="folder-grid">
+      <a class="folder-card" href="AP Micro Graphs/index.html">
+        <div class="folder-num">01</div>
+        <h3 data-i18n="folder1Title"></h3>
+        <p data-i18n="folder1Desc"></p>
+        <div class="folder-arrow" data-i18n="openFolder"></div>
+      </a>
+      <a class="folder-card" href="Previous Experiments/index.html">
+        <div class="folder-num">02</div>
+        <h3 data-i18n="folder2Title"></h3>
+        <p data-i18n="folder2Desc"></p>
+        <div class="folder-arrow" data-i18n="openFolder"></div>
+      </a>
+    </div>
+  </section>
+</div>
+
+<div class="section-border">
+  <section class="section" id="credit">
+    <div class="sec-header">
+      <span class="sec-num">03</span>
+      <h2 class="sec-title" data-i18n="creditTitle"></h2>
+    </div>
+    <div class="credit-card">
+      <div class="credit-left">
+        <div class="credit-kicker">JavaScript Engine</div>
+        <div class="credit-name">KineticGraphs (KGJS)</div>
+        <p class="credit-desc" data-i18n="creditDesc"></p>
+      </div>
+      <a class="credit-link" href="https://kineticgraphs.org" target="_blank" data-i18n="creditBtn"></a>
+    </div>
+  </section>
+</div>
+
+<div class="section-border">
+  <section class="section" id="contact">
+    <div class="sec-header">
+      <span class="sec-num">04</span>
+      <h2 class="sec-title" data-i18n="contactTitle"></h2>
+    </div>
+    <div class="contact-strip">
+      <div class="contact-left">
+        <h3 data-i18n="contactHeading"></h3>
+        <p data-i18n="contactDesc"></p>
+      </div>
+      <a class="contact-btn" href="https://github.com/Raylaoshi/AP.Econ.Graphs/issues" target="_blank" data-i18n="contactBtn"></a>
+    </div>
+  </section>
+</div>
+
+<div class="footer-wrap">
+  <footer>
+    <span>AP.Econ.Graphs · <a href="https://github.com/Raylaoshi/AP.Econ.Graphs" target="_blank">github.com/Raylaoshi</a></span>
+    <span data-i18n="footerCredit"></span>
+  </footer>
+</div>
+
+<script>
+const T = {
+  en: {
+    eyebrow:       'AP Economics · Interactive Learning',
+    h1a:           'Economics',
+    h1b:           'Made',
+    h1c:           'Visual.',
+    heroSub:       'Interactive graph models for AP Microeconomics — built for students, by a teacher who still asks "but why?"',
+    ctaGraphs:     'Explore Graphs ↓',
+    aboutTitle:    'About This Project',
+    tag1:          'The Story',
+    about1a:       'As an AP Economics teacher — and a philosophy major who found his way into the classroom — I\'ve always believed that abstract models only come alive when students can interact with them.',
+    about1b:       'Supply curves, cost functions, market equilibria — these aren\'t just diagrams. They are dynamic relationships that respond, shift, and balance in real time.',
+    tag2:          'How It Works',
+    about2a:       'Every graph here is built using Chris Makler\'s KineticGraphs (KGJS) engine, which makes it possible to create parameter-driven economic diagrams with simple declarative code.',
+    about2b:       'AI tools — including Claude Sonnet — are my coding companions. This is a living project and new graphs are added regularly.',
+    graphsTitle:   'Graph Directory',
+    folder1Title:  'AP Micro Graphs',
+    folder1Desc:   'Supply & demand, cost curves, market structures, and more core AP Micro models.',
+    folder2Title:  'Previous Experiments',
+    folder2Desc:   'Earlier prototypes showing the evolution of this project — rough edges and all.',
+    openFolder:    'Open folder →',
+    creditTitle:   'Built With',
+    creditDesc:    'Created by Chris Makler at Stanford University. KGJS powers every interactive diagram on this site through clean, declarative YAML/JSON definitions.',
+    creditBtn:     'Visit kineticgraphs.org ↗',
+    contactTitle:  'Get in Touch',
+    contactHeading:'Let\'s Connect',
+    contactDesc:   'Teaching AP Econ? Want to collaborate or suggest a graph? I\'m always happy to chat. 😊',
+    contactBtn:    'Leave a message →',
+    footerCredit:  'Built with KineticGraphs by Chris Makler'
+  },
+  zh: {
+    eyebrow:       'AP经济学 · 互动学习',
+    h1a:           '经济学',
+    h1b:           '可视化',
+    h1c:           '学习。',
+    heroSub:       '专为AP微观经济学设计的互动图表模型——由一位依然会问"为什么"的老师为学生打造。',
+    ctaGraphs:     '浏览图表 ↓',
+    aboutTitle:    '关于本项目',
+    tag1:          '项目背景',
+    about1a:       '作为一名AP经济学老师，我曾是哲学专业的学生，阴差阳错走进了课堂。我始终相信，抽象的模型只有当学生能够亲自操作时，才能真正活起来。',
+    about1b:       '供给曲线、成本函数、市场均衡——这些不只是图表，而是实时响应、动态变化、相互制衡的关系。',
+    tag2:          '技术实现',
+    about2a:       '本站所有图表均基于Chris Makler开发的KineticGraphs（KGJS）引擎，通过简洁的声明式代码构建可调参数的经济模型。',
+    about2b:       'AI工具——包括Claude Sonnet——是我的编程助手。这是一个持续更新的项目，新图表将不断加入。',
+    graphsTitle:   '图表目录',
+    folder1Title:  'AP微观经济图表',
+    folder1Desc:   '供求关系、成本曲线、市场结构等核心AP微观经济模型。',
+    folder2Title:  '早期实验',
+    folder2Desc:   '早期原型与实验性模型，记录了本项目的成长历程。',
+    openFolder:    '打开文件夹 →',
+    creditTitle:   '技术致谢',
+    creditDesc:    '由斯坦福大学Chris Makler开发。KGJS通过简洁的YAML/JSON定义驱动本站所有互动图表。',
+    creditBtn:     '访问官网 ↗',
+    contactTitle:  '联系我',
+    contactHeading:'欢迎交流',
+    contactDesc:   '正在教AP经济学？想合作或建议新图表？欢迎随时联系我。😊',
+    contactBtn:    '留言联系 →',
+    footerCredit:  '基于Chris Makler的KineticGraphs构建'
+  }
+};
+
+function render(lang) {
+  const t = T[lang];
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (t[key] !== undefined) el.textContent = t[key];
+  });
+  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  document.getElementById('btn-zh').classList.toggle('active', lang === 'zh');
+  document.documentElement.lang = lang === 'zh' ? 'zh' : 'en';
+}
+
+function setLang(lang) {
+  render(lang);
+  try { localStorage.setItem('econ-lang', lang); } catch(e) {}
+}
+
+function detectLang() {
+  try {
+    const saved = localStorage.getItem('econ-lang');
+    if (saved === 'en' || saved === 'zh') return saved;
+  } catch(e) {}
+  const nav = (navigator.language || navigator.userLanguage || '').toLowerCase();
+  return nav.startsWith('zh') ? 'zh' : 'en';
+}
+
+render(detectLang());
+</script>
+</body>
+</html>

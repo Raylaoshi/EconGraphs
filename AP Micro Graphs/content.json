@@ -2,11 +2,11 @@
   "units": [
     {
       "number": "Unit 3",
-      "title": "Production, Cost, and the Perfect Competition Model",
+      "title": "Production, Cost, and Perfect Competition",
       "chapters": [
         {
           "code": "3.2",
-          "title": "Short-Run Production",
+          "title": "Production Functions",
           "graphs": [
             {
               "file": "3.2.G1 Total Product and Margianl Product.html",
@@ -17,7 +17,7 @@
         },
         {
           "code": "3.3",
-          "title": "Short-Run Production Costs",
+          "title": "Cost Functions",
           "graphs": [
             {
               "file": "3.3-G1 Total Product and Total Variable Cost.html",
@@ -39,7 +39,7 @@
       "chapters": [
         {
           "code": "5.1",
-          "title": "Introduction to Factor Markets",
+          "title": "Labor Demand and Supply",
           "graphs": [
             {
               "file": "5.1-G1 Marginal Revenue Product of Labor.html",
@@ -50,7 +50,7 @@
         },
         {
           "code": "5.2",
-          "title": "Changes in Factor Demand and Factor Supply",
+          "title": "Firm's Behaviour in PC Labor Markets",
           "graphs": [
             {
               "file": "5.2-G1 PC Labor Market and Firm.html",

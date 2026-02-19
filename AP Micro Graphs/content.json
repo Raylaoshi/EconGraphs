@@ -1,0 +1,113 @@
+{
+  "units": [
+    {
+      "number": "Unit 3",
+      "title": "Production, Cost, and the Perfect Competition Model",
+      "chapters": [
+        {
+          "code": "3.2",
+          "title": "Short-Run Production",
+          "graphs": [
+            {
+              "file": "3.2.G1 Total Product and Margianl Product.html",
+              "title": "Total Product and Marginal Product",
+              "label": "G1"
+            }
+          ]
+        },
+        {
+          "code": "3.3",
+          "title": "Short-Run Production Costs",
+          "graphs": [
+            {
+              "file": "3.3-G1 Total Product and Total Variable Cost.html",
+              "title": "Total Product and Total Variable Cost",
+              "label": "G1"
+            },
+            {
+              "file": "3.3-G2 TVC, TFC and TC.html",
+              "title": "TVC, TFC and TC",
+              "label": "G2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": "Unit 5",
+      "title": "Factor Markets",
+      "chapters": [
+        {
+          "code": "5.1",
+          "title": "Introduction to Factor Markets",
+          "graphs": [
+            {
+              "file": "5.1-G1 Mraginal Revenue Product of Labor.html",
+              "title": "Marginal Revenue Product of Labor",
+              "label": "G1"
+            }
+          ]
+        },
+        {
+          "code": "5.2",
+          "title": "Changes in Factor Demand and Factor Supply",
+          "graphs": [
+            {
+              "file": "5.2-G1 PC Labor Market and Firm.html",
+              "title": "PC Labor Market and Firm",
+              "label": "G1"
+            }
+          ]
+        },
+        {
+          "code": "5.4",
+          "title": "Monopsony",
+          "graphs": [
+            {
+              "file": "5.4.G1 Monopsony.html",
+              "title": "Monopsony",
+              "label": "G1"
+            },
+            {
+              "file": "5.4.G2 Monopsony with Minimum Wage.html",
+              "title": "Monopsony with Minimum Wage",
+              "label": "G2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": "Unit 6",
+      "title": "Market Failure and the Role of Government",
+      "chapters": [
+        {
+          "code": "6.2",
+          "title": "Externalities",
+          "graphs": [
+            {
+              "file": "6.2-G1 Negative Production Externality.html",
+              "title": "Negative Production Externality",
+              "label": "G1"
+            },
+            {
+              "file": "6.2-G2 Negative Consumption Externality.html",
+              "title": "Negative Consumption Externality",
+              "label": "G2"
+            },
+            {
+              "file": "6.2-G3 Positive Consumption Externality.html",
+              "title": "Positive Consumption Externality",
+              "label": "G3"
+            },
+            {
+              "file": "6.2-G4 Positive Production Externality.html",
+              "title": "Positive Production Externality",
+              "label": "G4"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

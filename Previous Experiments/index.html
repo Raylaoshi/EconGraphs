@@ -185,7 +185,7 @@ async function loadFiles() {
     const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${encodeURIComponent(FOLDER)}`);
     if (!res.ok) throw new Error(res.status);
     const files = await res.json();
-    const htmlFiles = files.filter(f => f.type === 'file' && f.name.toLowerCase().endsWith('.html'));
+    const htmlFiles = files.filter(f => f.type === 'file' && f.name.toLowerCase().endsWith('.html') && f.name.toLowerCase() !== 'index.html');
 
     statusEl.style.display = 'none';
 

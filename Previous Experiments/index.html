@@ -4,92 +4,102 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Previous Experiments — AP.Econ.Graphs</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Outfit:wght@300;400;500&family=DM+Mono&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Outfit:wght@300;400;500&family=Noto+Sans+SC:wght@300;400;500&family=DM+Mono&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #fff;
-      --ink: #0d0d0d;
-      --mid: #666;
-      --faint: #f4f4f4;
-      --line: #e8e8e8;
-      --blue: #0057ff;
-      --blue-dim: #e6eeff;
+      /* THEME PALETTE */
+      --bg: #fcfbf9;
+      --ink: #050e3c;
+      --mid: #002455;
+      --faint: #f2f0eb;
+      --line: #e6e4e0;
+      --red: #DC0000;
+      --red-dim: #fce8e8;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
       background: var(--bg); color: var(--ink);
-      font-family: 'Outfit', -apple-system, sans-serif;
+      font-family: 'Outfit', 'Noto Sans SC', -apple-system, sans-serif;
       font-weight: 300; line-height: 1.7;
       -webkit-font-smoothing: antialiased;
+      opacity: 0; transition: opacity .35s ease;
     }
 
     /* TOPBAR */
     .topbar {
       position: sticky; top: 0; z-index: 100;
       display: flex; align-items: center; justify-content: space-between;
-      padding: 0 clamp(1rem,4vw,2rem); height: 56px;
+      padding: 0 clamp(1rem,4vw,2rem); height: 64px;
       border-bottom: 1px solid var(--line);
-      background: rgba(255,255,255,.95); backdrop-filter: blur(12px);
+      background: rgba(252,251,249,.95); backdrop-filter: blur(12px);
     }
-    .logo { font-family: 'Syne', sans-serif; font-weight: 800;
-      font-size: clamp(.85rem,2vw,1rem); letter-spacing: -.02em;
-      color: var(--ink); text-decoration: none; }
-    .logo span { color: var(--blue); }
+    .logo {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: clamp(.85rem,2vw,1.1rem); letter-spacing: -.02em;
+      color: var(--ink); text-decoration: none;
+    }
+    .logo span { color: var(--red); }
+    .topbar-right { display: flex; align-items: center; gap: 1rem; }
+    .lang-toggle { display: flex; gap: 6px; }
+    .lang-btn {
+      background: none; border: 1px solid var(--line); border-radius: 6px;
+      padding: .3rem .85rem; font-size: .78rem; font-family: inherit;
+      cursor: pointer; color: var(--mid); transition: all .18s; font-weight: 500;
+    }
+    .lang-btn:hover { border-color: var(--mid); }
+    .lang-btn.active { background: var(--ink); color: #fff; border-color: var(--ink); }
 
     /* PAGE HEADER */
+    .page-header-wrap { border-bottom: 1px solid var(--line); }
     .page-header {
-      border-bottom: 1px solid var(--line);
-      padding: clamp(2.5rem,6vw,4rem) clamp(1rem,4vw,2rem) clamp(1.5rem,4vw,2.5rem);
-      max-width: 1040px; margin: 0 auto;
+      max-width: 1100px; margin: 0 auto;
+      padding: clamp(3rem,7vw,5rem) clamp(1rem,4vw,2rem) clamp(2.5rem,5vw,4rem);
     }
-    .breadcrumb { font-size: .75rem; color: var(--mid); margin-bottom: .9rem;
-      display: flex; align-items: center; gap: .4rem; }
-    .breadcrumb a { color: var(--blue); text-decoration: none; }
-    .breadcrumb a:hover { text-decoration: underline; }
-    .page-header h1 { font-family: 'Syne', sans-serif; font-weight: 800;
-      font-size: clamp(2rem,6vw,4rem); letter-spacing: -.04em; line-height: 1; }
-    .page-header h1 .accent { color: var(--blue); }
-    .page-desc { margin-top: .8rem; font-size: .95rem; color: var(--mid); }
-
-    /* NOTE BANNER */
-    .note-banner {
-      max-width: 1040px; margin: 0 auto;
-      padding: 1rem clamp(1rem,4vw,2rem) 0;
-      border-bottom: 1px solid var(--line);
-      padding-bottom: 1rem;
+    .breadcrumb {
+      font-size: .75rem; color: var(--mid);
+      display: flex; align-items: center; gap: .4rem;
+      margin-bottom: 1.2rem;
     }
-    .note-inner {
-      background: var(--faint); border-radius: 6px;
-      padding: .8rem 1.1rem; font-size: .83rem; color: var(--mid);
-      display: flex; align-items: flex-start; gap: .6rem;
+    .back-btn {
+      display: inline-flex; align-items: center; gap: .4rem;
+      background: var(--faint); border: 1px solid var(--line);
+      color: var(--ink); text-decoration: none; font-family: 'Syne', sans-serif;
+      font-weight: 700; font-size: .85rem; padding: .5rem 1.1rem;
+      border-radius: 6px; transition: all .18s; cursor: pointer;
     }
-
-    /* STATS BAR */
-    .stats-bar {
-      max-width: 1040px; margin: 0 auto;
-      padding: .9rem clamp(1rem,4vw,2rem);
-      display: flex; align-items: center; justify-content: space-between;
-      flex-wrap: wrap; gap: .5rem;
-      border-bottom: 1px solid var(--line);
-      font-size: .78rem; color: var(--mid);
+    .back-btn:hover { background: var(--ink); color: #fff; border-color: var(--ink); }
+    
+    .page-eyebrow {
+      font-size: clamp(.65rem,1.5vw,.75rem); letter-spacing: .2em;
+      text-transform: uppercase; color: var(--mid);
+      margin-bottom: 1rem; font-weight: 600;
     }
-    .stats-bar strong { color: var(--ink); font-weight: 500; }
-    .gh-link { color: var(--mid); text-decoration: none; font-size: .78rem; }
-    .gh-link:hover { color: var(--ink); }
+    .page-header h1 {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: clamp(2.5rem,8vw,5rem); letter-spacing: -.04em; line-height: .95;
+      color: var(--ink);
+    }
+    .page-header h1 .accent { color: var(--red); }
+    .page-desc {
+      margin-top: 1.2rem; font-size: clamp(.95rem,2vw,1.05rem);
+      color: var(--mid); max-width: 520px; line-height: 1.6;
+    }
 
     /* MAIN */
     main {
-      max-width: 1040px; margin: 0 auto;
-      padding: clamp(2rem,5vw,3.5rem) clamp(1rem,4vw,2rem) clamp(4rem,8vw,6rem);
+      max-width: 1100px; margin: 0 auto;
+      padding: clamp(2rem,5vw,3rem) clamp(1rem,4vw,2rem) clamp(4rem,8vw,6rem);
     }
 
     /* STATUS */
-    #status { padding: 3rem 0; text-align: center; color: var(--mid); font-size: .9rem; }
-    .spinner { width: 18px; height: 18px; border: 2px solid var(--line);
-      border-top-color: var(--blue); border-radius: 50%;
-      animation: spin .7s linear infinite;
-      display: inline-block; margin-right: .5rem; vertical-align: middle; }
+    #status { padding: 4rem 0; text-align: center; color: var(--mid); font-size: .9rem; }
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2px solid var(--line); border-top-color: var(--red);
+      border-radius: 50%; animation: spin .7s linear infinite;
+      display: inline-block; margin-right: .5rem; vertical-align: middle;
+    }
     @keyframes spin { to { transform: rotate(360deg); } }
 
     /* GRAPH LIST */
@@ -100,36 +110,39 @@
       display: grid;
       grid-template-columns: 2.8rem 1fr auto;
       align-items: center; gap: clamp(.6rem,2vw,1.2rem);
-      padding: clamp(.75rem,2vw,.95rem) .4rem;
+      padding: clamp(.9rem,2vw,1.1rem) .4rem;
       text-decoration: none; color: var(--ink);
       transition: background .15s, padding-left .15s;
       border-radius: 4px;
     }
-    .graph-list li a:hover, .graph-list li a:active {
+    .graph-list li a:hover {
       background: var(--faint); padding-left: .9rem;
     }
-    .graph-label { font-family: 'DM Mono', monospace; font-size: .7rem;
-      background: var(--faint); color: var(--mid);
-      border: 1px solid var(--line);
-      padding: .15rem .45rem; border-radius: 3px; text-align: center;
-      white-space: nowrap; }
-    .graph-title { font-size: clamp(.88rem,2vw,.97rem); font-weight: 400; }
-    .graph-arrow { color: var(--blue); font-size: .9rem;
-      opacity: 0; transition: opacity .2s; }
+    .graph-label {
+      font-family: 'DM Mono', monospace; font-size: .68rem;
+      background: var(--line); color: var(--mid); 
+      padding: .15rem .45rem; border-radius: 3px;
+      text-align: center; font-weight: 500;
+    }
+    .graph-title { font-size: clamp(.95rem,2vw,1.05rem); font-weight: 400; }
+    .graph-arrow {
+      color: var(--red); font-size: .9rem;
+      opacity: 0; transition: opacity .2s;
+    }
     .graph-list li a:hover .graph-arrow { opacity: 1; }
 
-    /* EMPTY / ERROR */
-    .empty-state { padding: 3rem 0; text-align: center; color: var(--mid); }
-    .empty-state p { font-size: .9rem; }
-    .empty-state a { color: var(--blue); text-decoration: none; }
+    /* EMPTY STATE */
+    .empty-state { text-align: center; padding: 3rem 0; color: var(--mid); }
 
     /* FOOTER */
-    .footer-wrap { border-top: 1px solid var(--line); }
-    footer { max-width: 1040px; margin: 0 auto;
-      padding: clamp(1.2rem,3vw,1.5rem) clamp(1rem,4vw,2rem);
+    .footer-wrap { border-top: 1px solid var(--line); background: #fff; }
+    footer {
+      max-width: 1100px; margin: 0 auto;
+      padding: clamp(1.5rem,3vw,2rem) clamp(1rem,4vw,2rem);
       display: flex; flex-wrap: wrap; justify-content: space-between;
-      align-items: center; gap: .5rem; font-size: .78rem; color: var(--mid); }
-    footer a { color: var(--mid); text-decoration: none; }
+      align-items: center; gap: 1rem; font-size: .8rem; color: var(--mid);
+    }
+    footer a { color: var(--mid); text-decoration: none; transition: color .2s; }
     footer a:hover { color: var(--ink); }
 
     @media (max-width: 480px) {
@@ -142,56 +155,111 @@
 
 <header class="topbar">
   <a class="logo" href="../index.html"><span>AP</span>·Econ·Graphs</a>
+  <div class="topbar-right">
+    <div class="lang-toggle">
+      <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" id="btn-zh" onclick="setLang('zh')">中文</button>
+    </div>
+  </div>
 </header>
 
-<div class="page-header">
-  <div class="breadcrumb">
-    <a href="../index.html">← Home</a>
-    <span>/</span>
-    <span>Previous Experiments</span>
+<div class="page-header-wrap">
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a class="back-btn" href="../index.html" data-i18n="backHome">← Home</a>
+      <span style="color:var(--line);font-size:.9rem">/</span>
+      <span style="color:var(--mid);font-size:.85rem;font-weight:400" data-i18n="breadcrumbCurrent">Previous Experiments</span>
+    </div>
+    <div class="page-eyebrow" data-i18n="eyebrow">Graph Archives</div>
+    <h1><span data-i18n="h1a">Previous</span> <span class="accent" data-i18n="h1b">Experiments</span></h1>
+    <p class="page-desc" data-i18n="pageDesc">Earlier prototypes and exploratory graph models showing the evolution of this project.</p>
   </div>
-  <h1>Previous <span class="accent">Experiments</span></h1>
-  <p class="page-desc">Earlier prototypes and exploratory graph models. Click any file to open it.</p>
-</div>
-
-<div class="note-banner">
-  <div class="note-inner">
-    <span>🧪</span>
-    <span>These are older, experimental files — they show how this project evolved over time.</span>
-  </div>
-</div>
-
-<div class="stats-bar">
-  <span id="stats-label">&nbsp;</span>
-  <a class="gh-link" href="https://github.com/Raylaoshi/AP.Econ.Graphs/tree/main/Previous%20Experiments" target="_blank">View folder on GitHub ↗</a>
 </div>
 
 <main>
-  <div id="status"><span class="spinner"></span> Loading…</div>
+  <div id="status"><span class="spinner"></span> <span data-i18n="loading">Loading…</span></div>
   <ul class="graph-list" id="graph-list" style="display:none"></ul>
 </main>
 
 <div class="footer-wrap">
   <footer>
     <span>AP.Econ.Graphs · <a href="https://github.com/Raylaoshi/AP.Econ.Graphs" target="_blank">github.com/Raylaoshi</a></span>
-    <span>Built with KineticGraphs by Chris Makler</span>
+    <span data-i18n="footerCredit">Built with KineticGraphs by Chris Makler</span>
   </footer>
 </div>
 
 <script>
+// ── Translations ──
+const T = {
+  en: {
+    backHome:         '← Home',
+    breadcrumbCurrent:'Previous Experiments',
+    eyebrow:          'Graph Archives',
+    h1a:              'Previous',
+    h1b:              'Experiments',
+    pageDesc:         'Earlier prototypes and exploratory graph models showing the evolution of this project. Click any file to open it.',
+    loading:          'Loading…',
+    footerCredit:     'Built with KineticGraphs by Chris Makler',
+    emptyState:       'No files here yet.',
+    errorMsg:         '⚠️ Could not load files from GitHub API.',
+  },
+  zh: {
+    backHome:         '← 返回首页',
+    breadcrumbCurrent:'图表试验',
+    eyebrow:          '图表归档',
+    h1a:              '图表',
+    h1b:              '试验',
+    pageDesc:         '一些早期的模型尝试与探索性图表，展示了本项目的演变过程。点击任意文件即可打开。',
+    loading:          '加载中…',
+    footerCredit:     '基于Chris Makler的KineticGraphs构建',
+    emptyState:       '暂无文件。',
+    errorMsg:         '⚠️ 无法从 GitHub API 加载文件列表。',
+  }
+};
+
 const REPO   = 'Raylaoshi/AP.Econ.Graphs';
 const FOLDER = 'Previous Experiments';
-const GH_FOLDER_URL = 'https://github.com/Raylaoshi/AP.Econ.Graphs/tree/main/Previous%20Experiments';
+
+let currentLang = 'en';
+
+function render(lang) {
+  const t = T[lang];
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (typeof t[key] === 'string') el.textContent = t[key];
+  });
+  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  document.getElementById('btn-zh').classList.toggle('active', lang === 'zh');
+  document.documentElement.lang = lang === 'zh' ? 'zh' : 'en';
+}
+
+function setLang(lang) {
+  currentLang = lang;
+  render(lang);
+  try { localStorage.setItem('econ-lang', lang); } catch(e) {}
+}
+
+function detectLang() {
+  try {
+    const saved = localStorage.getItem('econ-lang');
+    if (saved === 'en' || saved === 'zh') return saved;
+  } catch(e) {}
+  const nav = (navigator.language || '').toLowerCase();
+  return nav.startsWith('zh') ? 'zh' : 'en';
+}
 
 async function init() {
   const statusEl = document.getElementById('status');
   const listEl   = document.getElementById('graph-list');
-  const statsEl  = document.getElementById('stats-label');
+
+  currentLang = detectLang();
+  render(currentLang);
 
   try {
     const res = await fetch(
       `https://api.github.com/repos/${REPO}/contents/${encodeURIComponent(FOLDER)}`
     );
+    
     if (!res.ok) throw new Error(res.status);
     const files = await res.json();
 
@@ -206,7 +274,7 @@ async function init() {
     if (htmlFiles.length === 0) {
       statusEl.style.display = 'block';
       statusEl.innerHTML = `<div class="empty-state">
-        <p>No files here yet. <a href="${GH_FOLDER_URL}" target="_blank">Browse on GitHub →</a></p>
+        <p>${T[currentLang].emptyState}</p>
       </div>`;
       return;
     }
@@ -214,7 +282,7 @@ async function init() {
     listEl.style.display = 'block';
 
     htmlFiles.forEach((file, i) => {
-      // Clean display name: remove .html extension, replace hyphens/underscores with spaces
+      // Clean display name: remove .html, replace hyphens/underscores with spaces
       const displayName = file.name
         .replace(/\.html$/i, '')
         .replace(/[-_]/g, ' ');
@@ -230,17 +298,22 @@ async function init() {
       listEl.appendChild(li);
     });
 
-    statsEl.innerHTML = `<strong>${htmlFiles.length}</strong> file${htmlFiles.length !== 1 ? 's' : ''}`;
-
   } catch (err) {
     statusEl.innerHTML = `<div class="empty-state">
-      <p>⚠️ Could not load files. <a href="${GH_FOLDER_URL}" target="_blank">Browse on GitHub instead →</a></p>
+      <p>${T[currentLang].errorMsg}</p>
     </div>`;
     console.error(err);
   }
 }
 
 init();
+</script>
+<script>
+  // Fade in body
+  document.fonts.ready.then(() => {
+    document.body.style.opacity = '1';
+  });
+  setTimeout(() => { document.body.style.opacity = '1'; }, 800);
 </script>
 </body>
 </html>

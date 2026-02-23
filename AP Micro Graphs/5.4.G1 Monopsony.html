@@ -3,19 +3,22 @@
 <head>
     <meta charset="utf-8">
     <title>Monopsony</title>
-    <link href="https://kineticgraphs.org/css/kg.0.4.0.css" rel="stylesheet" type="text/css">
-    <script src="https://kineticgraphs.org/js/kg.0.4.0.js"></script>
+    <link href="https://raylaoshi.github.io/AP.Econ.Graphs/lib/kg.0.4.0.css" rel="stylesheet" type="text/css">
+    <script src="https://raylaoshi.github.io/AP.Econ.Graphs/lib/kg.0.4.0.js"></script>
     
     <style>
       .kg-container {
         user-select: none;
         -webkit-user-select: none;
+        opacity: 0;
+        transition: opacity 0.4s ease;
       }
       /* Only disable pointer events on non-draggable decorative elements */
       svg text {
         pointer-events: none;
       }
     </style>
+
     <script>
       document.addEventListener('DOMContentLoaded', function() {
         const container = document.querySelector('.kg-container');
@@ -25,6 +28,9 @@
               e.preventDefault();
             }
           }, true);
+
+          // Reveal after KG has had time to render
+          setTimeout(() => { container.style.opacity = '1'; }, 400);
         }
       });
     </script>

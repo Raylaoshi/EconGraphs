@@ -10,12 +10,15 @@
       .kg-container {
         user-select: none;
         -webkit-user-select: none;
+        opacity: 0;
+        transition: opacity 0.4s ease;
       }
       /* Only disable pointer events on non-draggable decorative elements */
       svg text {
         pointer-events: none;
       }
     </style>
+
     <script>
       document.addEventListener('DOMContentLoaded', function() {
         const container = document.querySelector('.kg-container');
@@ -25,6 +28,9 @@
               e.preventDefault();
             }
           }, true);
+
+          // Reveal after KG has had time to render
+          setTimeout(() => { container.style.opacity = '1'; }, 400);
         }
       });
     </script>

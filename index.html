@@ -405,7 +405,10 @@ function detectLang() {
   return nav.startsWith('zh') ? 'zh' : 'en';
 }
 
-render(detectLang());
+// Wait for the entire HTML to be read before running the initial translation
+document.addEventListener('DOMContentLoaded', function() {
+  render(detectLang());
+});
 </script>
 
 <!-- WECHAT MODAL -->

@@ -1,105 +1,221 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Total Product and Marginal Product</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AP.Econ.Graphs</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Noto+Sans+SC:wght@300;400;500;700&family=Outfit:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+    
+    <!-- KGJS Engine -->
     <link href="https://raylaoshi.github.io/AP.Econ.Graphs/lib/kg.0.4.0.css" rel="stylesheet" type="text/css">
     <script src="https://raylaoshi.github.io/AP.Econ.Graphs/lib/kg.0.4.0.js"></script>
     
     <style>
-      .kg-container {
-        user-select: none;
-        -webkit-user-select: none;
-        opacity: 0;
-        transition: opacity 0.4s ease;
-      }
-      /* Only disable pointer events on non-draggable decorative elements */
-      svg text {
-        pointer-events: none;
-      }
-    </style>
-
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const container = document.querySelector('.kg-container');
-        if (container) {
-          container.addEventListener('mousedown', function(e) {
-            if (e.target.closest('svg')) {
-              e.preventDefault();
-            }
-          }, true);
-
-          // Reveal after KG has had time to render
-          setTimeout(() => { container.style.opacity = '1'; }, 400);
+        /* ── THEME PALETTE ── */
+        :root {
+            --bg: #fcfbf9;
+            --ink: #050e3c;
+            --mid: #002455;
+            --faint: #f2f0eb;
+            --line: #e6e4e0;
+            --red: #DC0000;
+            --red-dim: #fce8e8;
+            --blue: #0057ff;
         }
-      });
-    </script>
-</head>
 
-    <style>
-        /* 1. General Page Styling */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        
         body {
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            background-color: #ffffff; /* Light cream/paper color */
-            margin: 0;
-            padding: 40px;
-            color: #1a1a1a;
-            line-height: 1.5;
+            background: #ffffff; 
+            color: var(--ink);
+            font-family: 'Outfit', 'Noto Sans SC', -apple-system, sans-serif;
+            font-weight: 300; 
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            opacity: 0; 
+            transition: opacity 0.4s ease-in-out;
         }
 
-        /* 2. Header and Intro Container */
-        .content-wrapper {
-            max-width: 900px;  /* Keeps text from being too wide to read */
-            margin: auto ;  
-            text-align: center;
+        /* ── TOPBAR ── */
+        .topbar {
+            position: relative;
+            z-index: 100;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 clamp(1rem,4vw,2rem); height: 64px;
+            border-bottom: 1px solid var(--line);
+            background: rgba(252,251,249,.95); backdrop-filter: blur(12px);
+        }
+        .logo {
+            font-family: 'Syne', sans-serif; font-weight: 800;
+            font-size: clamp(.85rem,2vw,1.1rem); letter-spacing: -.02em;
+            color: var(--ink); text-decoration: none;
+        }
+        .logo span { color: var(--red); }
+        .topbar-right { display: flex; align-items: center; gap: 1rem; }
+        .lang-toggle { display: flex; gap: 6px; }
+        .lang-btn {
+            background: none; border: 1px solid var(--line); border-radius: 6px;
+            padding: .3rem .85rem; font-size: .78rem; font-family: inherit;
+            cursor: pointer; color: var(--mid); transition: all .18s; font-weight: 500;
+        }
+        .lang-btn:hover { border-color: var(--mid); }
+        .lang-btn.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+        /* ── PAGE HEADER & BREADCRUMBS ── */
+        .page-header-wrap { border-bottom: 1px solid var(--line); background: #fff; }
+        .page-header {
+            max-width: 1100px; margin: 0 auto;
+            /* Reduced bottom padding to tighten space between text and graph */
+            padding: clamp(2rem,5vw,4rem) clamp(1rem,4vw,2rem) clamp(1rem,3vw,2rem);
+        }
+        .breadcrumb {
+            font-size: .75rem; color: var(--mid);
+            display: flex; align-items: center; gap: .4rem; flex-wrap: wrap;
+            margin-bottom: 1.2rem;
+            min-height: 1.2rem;
+        }
+        .back-btn {
+            display: inline-flex; align-items: center; gap: .4rem;
+            background: var(--faint); border: 1px solid var(--line);
+            color: var(--ink); text-decoration: none; 
+            font-family: 'Outfit', sans-serif; 
+            font-weight: 600; font-size: .8rem; padding: .5rem 1.1rem;
+            border-radius: 6px; transition: all .18s; cursor: pointer;
+        }
+        .back-btn:hover { background: var(--ink); color: #fff; border-color: var(--ink); }
+        
+        .breadcrumb .sep { color: var(--line); font-size: .9rem; margin: 0 .2rem; }
+        .breadcrumb .folder-link {
+            color: var(--mid); text-decoration: none; font-size: .85rem; transition: color .2s;
+        }
+        .breadcrumb .folder-link:hover { color: var(--ink); text-decoration: underline; }
+        .breadcrumb .code-label { color: var(--mid); font-size: .85rem; }
+
+        .page-eyebrow {
+            font-size: clamp(.65rem,1.5vw,.75rem); letter-spacing: .15em;
+            text-transform: uppercase; color: var(--mid);
+            margin-bottom: 1rem; font-weight: 600;
+            min-height: 1em;
+        }
+        .page-header h1 {
+            font-family: 'Outfit', sans-serif; 
+            font-weight: 700;
+            font-size: clamp(2.2rem,6vw,3.8rem); 
+            letter-spacing: -.02em; 
+            line-height: 1.1; 
+            color: var(--ink); 
+            min-height: 1.1em;
         }
 
-        h1 {
-            font-size: 1.4rem;
-            margin-bottom: 20px;
-            color: #263646;
+        /* ── UNIFIED DESCRIPTION ── */
+        .page-desc {
+            margin-top: 1.2rem;
+            font-size: clamp(.95rem,2vw,1.05rem);
+            color: var(--mid); 
+            line-height: 1.7;
+            max-width: 800px;
+        }
+        .page-desc p { margin-bottom: 0.8rem; }
+        .page-desc strong { color: var(--ink); font-weight: 600; }
+        .page-desc ol, .page-desc ul { margin-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0; }
+        .page-desc li { margin-bottom: 0.3rem; }
+        .page-desc li strong { color: var(--red); font-weight: 500; }
+
+        /* Typography Adjustments for Chinese */
+        :lang(zh) .page-desc { line-height: 1.8; letter-spacing: 0.02em; }
+
+        /* ── MAIN CONTENT ── */
+        main {
+            max-width: 1100px; margin: 0 auto;
+            padding: 0 clamp(1rem,4vw,2rem) clamp(4rem,8vw,6rem);
         }
 
-        .intro-text { 
-            font-size: 1rem;
-            color: #666;
-            margin-bottom: 30px;
-            text-align: left; /* Text usually looks better left-aligned */
-            padding-left: 20px;
-            background: #f0f0f0bd;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 4px 2px 5px rgba(0,0,0,0.05);
-        }
-
-        /* 3. Graph Container Styling */
+        /* ── GRAPH CONTAINER ── */
         .kg-container {
-            margin: 0 auto;
-            border-radius: 4px;
-            overflow: show;
-            background-color: rgb(255, 255, 255);
+            max-width: 1100px; 
+            
+            /* Spacing: Add head room */
+            margin: 3rem 0 0 0; 
+            position: relative;
+            
+            /* WHITE BACKGROUND, NO BORDER */
+            background: #ffffff;
+            border-radius: 12px;
+
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        svg text { pointer-events: none; }
+
+        /* force theme*/
+        .kg-container div, 
+        .kg-container span, 
+        .kg-container p,
+        .kg-container text {
+            font-family: 'Outfit', sans-serif !important;
+        }
+
+        /* ── FOOTER ── */
+        .footer-wrap { border-top: 1px solid var(--line); background: #fff; }
+        footer {
+            max-width: 1100px; margin: 0 auto;
+            padding: clamp(1.5rem,3vw,2rem) clamp(1rem,4vw,2rem);
+            display: flex; flex-wrap: wrap; justify-content: space-between;
+            align-items: center; gap: 1rem; font-size: .8rem; color: var(--mid);
+        }
+        footer a { color: var(--mid); text-decoration: none; transition: color .2s; }
+        footer a:hover { color: var(--ink); }
+
+        /* ── MOBILE RESPONSIVENESS ── */
+        @media (max-width: 768px) {
+            .page-header { padding-top: 2rem; padding-bottom: 2rem; }
+            .kg-container { margin-top: 2rem; padding: 1rem; }
         }
     </style>
 </head>
 <body>
 
-<div class="content-wrapper">
-    <!-- Centered Header -->
-    <h1>Total & Marginal Product</h1>
-
-    <!-- Brief Introduction -->
-    <div class="intro-text">
-        <strong>TP和MP的关系可以分为3个阶段：</strong>
-        <ol>
-            <li>L = 1~4：MP递增，TP递增,但<strong>增速</strong>递增</li>
-            <li>L = 4~8：MP递减，TP递增,但<strong>减速</strong>递增</li>
-            <li>L > 8：MP为负，TP下降</li>
-        </ol>
+<header class="topbar">
+    <a class="logo" href="../index.html"><span>AP</span>·Econ·Graphs</a>
+    <div class="topbar-right">
+        <div class="lang-toggle">
+            <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
+            <button class="lang-btn" id="btn-zh" onclick="setLang('zh')">中文</button>
+        </div>
     </div>
+</header>
 
+<div class="page-header-wrap">
+    <div class="page-header">
+        <div class="breadcrumb">
+            <a class="back-btn" href="javascript:history.back()" data-i18n="backBtn">⥃ Back</a>
+            <span class="sep">/</span>
+            <!-- Mother Folder -->
+            <a href="index.html" class="folder-link" data-i18n="breadcrumbFolder"></a>
+            <span class="sep">/</span>
+            <!-- Code + Label -->
+            <span class="code-label" data-i18n="breadcrumbCode"></span>
+        </div>
+        
+        <!-- Unit Number + Title -->
+        <div class="page-eyebrow" data-i18n="pageEyebrow"></div>
+        
+        <!-- PAGE TITLE -->
+        <h1 data-i18n="pageTitle"></h1>
+        
+        <!-- UNIFIED DESCRIPTION AREA -->
+        <div class="page-desc" data-i18n="pageDesc"></div>
+    </div>
+</div>
 
+<main>
+<!-- GRAPH DATA (Paste your YAML here) -->
 <div class="kg-container">
-
 schema: EconSchema
 version: 1
 Name: Hello World - Total and Marginal Product
@@ -168,19 +284,19 @@ layout:
             a: [calcs.InflectionX, yAxis]
             b: [calcs.InflectionX, 0] 
             strokeWidth: 1
-            lineStyle: dashed
+            lineStyle: dotted
             color: grey
 
         # Region Labels - left
         - Label:
-            coordinates: [calcs.StageI, /] 
+            coordinates: [calcs.StageI, 300] 
             text: \text{Increasing Marginal Returns}
             color: black
             fontSize: 10
         
         # Region Labels - right
         - Label:
-            coordinates: [calcs.StageII, /]
+            coordinates: [calcs.StageII, 300]
             text: \text{Diminishing Marginal Returns}
             color: black
             fontSize: 10
@@ -213,11 +329,12 @@ layout:
             slope: calcs.MP
             min: params.L - 1.5
             max: params.L + 1.5
-            strokeWidth: 3
+            strokeWidth: 2
             label:
               text: "`slope=MP=${calcs.MP.toFixed(1)}`"
               x: params.L
               position: br
+              fontSize: 10
   
     bottomGraph:
       xAxis:
@@ -230,9 +347,9 @@ layout:
       yAxis:
         title: Output
         orient: left
-        min: -70
-        max: 70
-        ticks: 5
+        min: -60
+        max: 60
+        ticks: 8
       
       objects:
         - Curve:
@@ -276,7 +393,7 @@ layout:
         
         # add a label showing the total product
         - Label:
-            coordinates: [(params.L-.6), (0.5*calcs.MP)]
+            coordinates: [(params.L-.8), (0.5*calcs.MP)]
             text: "`TP = ${calcs.TP.toFixed(1)}`"
             color: blue
             bgcolor: none
@@ -287,19 +404,19 @@ layout:
             a: [calcs.InflectionX, yAxis]
             b: [calcs.InflectionX, 0] 
             strokeWidth: 1
-            lineStyle: dashed
+            lineStyle: dotted
             color: grey
 
         # Region Labels - left
         - Label:
-            coordinates: [calcs.StageI, /] 
+            coordinates: [calcs.StageI, 60] 
             text: \text{Increasing Marginal Returns}
             color: black
             fontSize: 10
         
         # Region Labels - right
         - Label:
-            coordinates: [calcs.StageII, /]
+            coordinates: [calcs.StageII, 60]
             text: \text{Diminishing Marginal Returns}
             color: black
             fontSize: 10
@@ -325,6 +442,182 @@ layout:
               position: bl
             fontSize: 10
             r: 5
+</div>
+
+</main>
+
+<div class="footer-wrap">
+  <footer>
+    <span>AP.Econ.Graphs · <a href="https://github.com/Raylaoshi/AP.Econ.Graphs" target="_blank">github.com/Raylaoshi</a></span>
+    <span data-i18n="footerCredit">Built with KineticGraphs by Chris Makler</span>
+  </footer>
+</div>
+
+<script>
+// ── Translations Object ──
+const T = {
+  en: {
+    backBtn:          '⥃ Back',
+    footerCredit:     'Built with KineticGraphs by Chris Makler'
+  },
+  zh: {
+    backBtn:          '⥃ 返回',
+    footerCredit:     '基于Chris Makler的KineticGraphs构建'
+  }
+};
+
+// ── Manual Content Configuration (Fallback) ──
+const MANUAL_DATA = {
+    title: "Total & Marginal Product",
+    descEn: `<p>Drag the point along the Labor axis to observe the relationship between the Total Product (TP) curve and the Marginal Product (MP) curve.</p>
+             <strong>The relationship between TP and MP can be divided into 3 stages:</strong>
+             <ol>
+                 <li>L = 1~4: MP increases, TP increases at an <strong>increasing</strong> rate.</li>
+                 <li>L = 4~8: MP decreases, TP increases at a <strong>decreasing</strong> rate.</li>
+                 <li>L > 8: MP is negative, TP decreases.</li>
+             </ol>`,
+    descZh: `<p>沿劳动力轴拖动端点，观察总产量（TP）曲线与边际产量（MP）曲线之间的关系。</p>
+             <strong>TP和MP的关系可以分为3个阶段：</strong>
+             <ol>
+                 <li>L = 1~4：MP递增，TP递增，但<strong>增速</strong>递增</li>
+                 <li>L = 4~8：MP递减，TP递增，但<strong>减速</strong>递增</li>
+                 <li>L > 8：MP为负，TP下降</li>
+             </ol>`
+};
+
+let currentLang = 'en';
+
+// ── 1. Dynamic Mother Folder Extraction ──
+function setupFolderBreadcrumb() {
+    const pathParts = window.location.pathname.split('/');
+    let folderName = 'Folder';
+    if (pathParts.length >= 2 && pathParts[pathParts.length - 2]) {
+        folderName = decodeURIComponent(pathParts[pathParts.length - 2]);
+    }
+
+    const folderTranslations = {
+        "AP Micro Graphs": "AP微观经济图表",
+        "AP Macro Graphs": "AP宏观经济图表",
+        "Previous Experiments": "图表试验"
+    };
+
+    T.en.breadcrumbFolder = folderName;
+    T.zh.breadcrumbFolder = folderTranslations[folderName] || folderName;
+}
+
+// ── 2. Dynamic JSON Reader ──
+async function loadMetadata() {
+  // Populate defaults from MANUAL_DATA first (in case fetch fails or file not found)
+  T.en.pageTitle = MANUAL_DATA.title;
+  T.zh.pageTitle = MANUAL_DATA.title;
+  T.en.pageDesc  = MANUAL_DATA.descEn;
+  T.zh.pageDesc  = MANUAL_DATA.descZh;
+
+  try {
+    const res = await fetch('content.json');
+    if (!res.ok) return; 
+    const data = await res.json();
+    
+    const currentPath = window.location.pathname;
+    const currentFile = decodeURIComponent(currentPath.split('/').pop());
+
+    for (const unit of data.units) {
+      for (const ch of unit.chapters) {
+        for (const graph of ch.graphs) {
+          if (graph.file === currentFile || decodeURIComponent(graph.file) === currentFile) {
             
+            // Breadcrumb: Code + Label
+            const codeLabelStr = (ch.code && graph.label) ? `${ch.code} · ${graph.label}` : (ch.code || graph.label || "");
+            T.en.breadcrumbCode = codeLabelStr;
+            T.zh.breadcrumbCode = codeLabelStr;
+            
+            // Eyebrow: Unit Number + Title
+            T.en.pageEyebrow = `${unit.number} - ${unit.title}`;
+            T.zh.pageEyebrow = `${unit.number_zh || unit.number} - ${unit.title_zh || unit.title}`;
+            
+            // Title (Always English)
+            T.en.pageTitle = graph.title;
+            T.zh.pageTitle = graph.title;
+
+            // Browser Tab Title
+            document.title = `${graph.title} — AP.Econ.Graphs`;
+            
+            return; // Found and updated, exit function
+          }
+        }
+      }
+    }
+  } catch(e) {
+    console.log("Using manual metadata due to fetch error or missing file.");
+  }
+}
+
+// ── 3. Render UI ──
+function render(lang) {
+  const t = T[lang];
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (t[key] !== undefined) {
+        // Use innerHTML for description to allow bolding/lists
+        if (key === 'pageDesc') {
+            el.innerHTML = t[key];
+        } else {
+            el.textContent = t[key];
+        }
+    }
+  });
+  
+  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  document.getElementById('btn-zh').classList.toggle('active', lang === 'zh');
+  document.documentElement.lang = lang === 'zh' ? 'zh' : 'en';
+}
+
+function setLang(lang) {
+  currentLang = lang;
+  render(lang);
+  try { localStorage.setItem('econ-lang', lang); } catch(e) {}
+}
+
+function detectLang() {
+  try {
+    const saved = localStorage.getItem('econ-lang');
+    if (saved === 'en' || saved === 'zh') return saved;
+  } catch(e) {}
+  const nav = (navigator.language || navigator.userLanguage || '').toLowerCase();
+  return nav.startsWith('zh') ? 'zh' : 'en';
+}
+
+// ── 4. Initialization Sequence ──
+async function init() {
+    // A. Setup Folder Name
+    setupFolderBreadcrumb();
+
+    // B. Detect Language
+    currentLang = detectLang();
+
+    // C. Wait for Metadata (Async)
+    await loadMetadata();
+
+    // D. Render Text
+    render(currentLang);
+
+    // E. Reveal Page
+    document.body.style.opacity = '1';
+
+    // F. Setup Graph Interaction (Prevent dragging whole SVG)
+    const container = document.querySelector('.kg-container');
+    if (container) {
+      container.addEventListener('mousedown', function(e) {
+        if (e.target.closest('svg')) {
+          e.preventDefault();
+        }
+      }, true);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', init);
+
+</script>
+
 </body>
 </html>

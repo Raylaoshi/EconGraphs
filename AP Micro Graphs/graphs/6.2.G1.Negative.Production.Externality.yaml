@@ -43,15 +43,6 @@ layout:
         min: 0
         ticks: 6
       objects:
-        # Title
-        - Label:
-            coordinates: [50, 115]
-            text: \text{Negative Production Externality with Pigouvian Tax}
-            fontSize: 13
-            color: black
-            position: b
-            bgcolor: none
-
         # Demand = MPB = MSB
         - Line:
             yIntercept: 120
@@ -288,9 +279,9 @@ layout:
             - html: "`Current tax = $${params.tax.toFixed(0)}`"
             - html: "`Optimal tax = $${params.MEC.toFixed(0)}`"
             - html: "`Remaining overproduction = ${calcs.overproduction.toFixed(0)} units`"
-            - html: <hr/><b>External Costs:</b>
-            - html: <span style="color:orange">Orange area</span> - External cost incurred at Q<sub>MKT</sub>
-            - html: <span style="color:green">Green area</span> - Tolerable external cost at Q<sub>So</sub>
-            - html: <span style="color:red">Red triangle</span> - Deadweight loss from overproduction
-            - html: <hr/><i>Example - Factory pollution. Set tax = MEC to eliminate DWL!</i>
+            - html: "<hr/><b>External Costs:</b>"
+            - html: "<span style=\"color:orange\">Orange area</span> - External cost incurred at Q<sub>MKT</sub>"
+            - html: "<span style=\"color:green\">Green area</span> - Tolerable external cost at Q<sub>So</sub>"
+            - html: "<span style=\"color:red\">Red triangle</span> - Deadweight loss from overproduction"
+            - html: "<hr/><i>Example - Factory pollution. Set tax = MEC to eliminate DWL!</i>"
             

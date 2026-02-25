@@ -46,15 +46,6 @@ layout:
         min: 0
         ticks: 6
       objects:
-        # Title
-        - Label:
-            coordinates: [50, 115]
-            text: \text{Positive Production Externality with Pigouvian Subsidy}
-            fontSize: 13
-            color: black
-            position: b
-            bgcolor: none
-
         # Demand = MPB = MSB
         - Line:
             yIntercept: 120
@@ -291,8 +282,8 @@ layout:
             - html: "`Current subsidy = $${params.subsidy.toFixed(0)}`"
             - html: "`Optimal subsidy = $${params.MEB.toFixed(0)}`"
             - html: "`Remaining underproduction = ${calcs.underproduction.toFixed(0)} units`"
-            - html: <hr/><b>External Benefits:</b>
-            - html: <span style="color:#1F77B4">Blue area</span> - Realized external benefit at Q<sub>MKT</sub>
-            - html: <span style="color:green">Green area</span> - Optimal external benefit at Q<sub>So</sub>
-            - html: <span style="color:red">Red triangle</span> - Deadweight loss from underproduction
-            - html: <hr/><i>Example - R&D spillovers. Set subsidy = MEB to eliminate DWL!</i>
+            - html: "<hr/><b>External Benefits:</b>"
+            - html: "<span style=\"color:#1F77B4\">Blue area</span> - Realized external benefit at Q<sub>MKT</sub>"
+            - html: "<span style=\"color:green\">Green area</span> - Optimal external benefit at Q<sub>So</sub>"
+            - html: "<span style=\"color:red\">Red triangle</span> - Deadweight loss from underproduction"
+            - html: "<hr/><i>Example - R&D spillovers. Set subsidy = MEB to eliminate DWL!</i>"

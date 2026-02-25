@@ -6,7 +6,6 @@ eyebrow_zh: 第五单元 — 要素市场
 description: |
 description_zh: |
 
-
 schema: EconSchema
 params:
   - {name: minimumWage, value: 150, min: 0, max: 250, round: 1}

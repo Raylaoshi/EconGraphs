@@ -143,20 +143,23 @@
             padding: 0 clamp(1rem,4vw,2rem) clamp(4rem,8vw,6rem);
         }
 
-        /* ── GRAPH CONTAINER ── */
-        .kg-container {
-            max-width: 1100px; 
-            margin: 3rem 0 0 0; 
-            position: relative;
-            background: #ffffff;
-            border-radius: 12px;
-            user-select: none;
-            -webkit-user-select: none;
+        /* ── GRAPH IFRAME ── */
+        .graph-frame-wrap {
+            margin: 2rem 0 0 0;
             opacity: 0;
             transition: opacity 0.4s ease;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
         }
-        .kg-container.ready { opacity: 1; }
-        svg text { pointer-events: none; }
+        .graph-frame-wrap.ready { opacity: 1; }
+        .graph-frame {
+            width: 100%;
+            border: none;
+            display: block;
+            /* Height is set dynamically via JS to match iframe content */
+            min-height: 500px;
+        }
 
         /* ── FOOTER ── */
         .footer-wrap { border-top: 1px solid var(--line); background: #fff; }
@@ -206,7 +209,9 @@
     <div class="state-msg" id="state-msg">
         <span class="spinner"></span> <span id="loading-text">Loading graph…</span>
     </div>
-    <div class="kg-container" id="kg-container"></div>
+    <div class="graph-frame-wrap" id="graph-frame-wrap">
+        <iframe class="graph-frame" id="graph-frame" scrolling="no"></iframe>
+    </div>
 </main>
 
 <div class="footer-wrap">
@@ -392,34 +397,67 @@ async function init() {
     // Render UI with metadata
     render(currentLang);
 
-    // Inject graph YAML into KG container
-    const kgEl = document.getElementById('kg-container');
-    kgEl.textContent = stripFrontMatter(yamlText);
+    // Build a complete self-contained HTML page with the YAML already embedded.
+    // KG initialises on DOMContentLoaded inside the iframe — always finds the content.
+    const strippedYaml = stripFrontMatter(yamlText);
+    const iframeHTML = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link href="https://raylaoshi.github.io/AP.Econ.Graphs/lib/kg.0.4.0.css" rel="stylesheet">
+  <script src="https://raylaoshi.github.io/AP.Econ.Graphs/lib/kg.0.4.0.js"><\/script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #fff; overflow: hidden; }
+    .kg-container {
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    svg text { pointer-events: none; }
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const container = document.querySelector('.kg-container');
+      if (container) {
+        container.addEventListener('mousedown', function(e) {
+          if (e.target.closest('svg')) e.preventDefault();
+        }, true);
+      }
+      // Tell parent the content height so iframe resizes correctly
+      function reportHeight() {
+        const h = document.body.scrollHeight;
+        window.parent.postMessage({ type: 'kg-height', height: h }, '*');
+      }
+      // Report after KG has rendered (give it a moment)
+      setTimeout(reportHeight, 600);
+      window.addEventListener('resize', reportHeight);
+    });
+  <\/script>
+</head>
+<body>
+<div class="kg-container">
+${strippedYaml}
+</div>
+</body>
+</html>`;
 
-    // Hide loader
-    document.getElementById('state-msg').style.display = 'none';
+    // Create a Blob URL and assign to iframe
+    const blob = new Blob([iframeHTML], { type: 'text/html' });
+    const blobURL = URL.createObjectURL(blob);
 
-    // Load KG CSS then JS dynamically — guarantees KG scans DOM after YAML is present
-    const kgCSS = document.createElement('link');
-    kgCSS.rel = 'stylesheet';
-    kgCSS.href = 'https://raylaoshi.github.io/AP.Econ.Graphs/lib/kg.0.4.0.css';
-    document.head.appendChild(kgCSS);
+    const frameWrap = document.getElementById('graph-frame-wrap');
+    const frame     = document.getElementById('graph-frame');
 
-    await new Promise((resolve, reject) => {
-      const kgJS = document.createElement('script');
-      kgJS.src = 'https://raylaoshi.github.io/AP.Econ.Graphs/lib/kg.0.4.0.js';
-      kgJS.onload = resolve;
-      kgJS.onerror = reject;
-      document.head.appendChild(kgJS);
+    // Listen for height reports from iframe
+    window.addEventListener('message', function(e) {
+      if (e.data && e.data.type === 'kg-height') {
+        frame.style.height = (e.data.height + 20) + 'px';
+        frameWrap.classList.add('ready');
+        document.getElementById('state-msg').style.display = 'none';
+      }
     });
 
-    // KG has now initialised — reveal graph
-    setTimeout(() => { kgEl.classList.add('ready'); }, 200);
-
-    // Prevent full SVG drag
-    kgEl.addEventListener('mousedown', e => {
-      if (e.target.closest('svg')) e.preventDefault();
-    }, true);
+    frame.src = blobURL;
 
   } catch(err) {
     render(currentLang);

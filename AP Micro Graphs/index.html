@@ -379,8 +379,13 @@ init();
   document.fonts.ready.then(() => {
     document.body.style.opacity = '1';
   });
-  // Fallback: show after 800ms in case Google Fonts is blocked or slow
-  setTimeout(() => { document.body.style.opacity = '1'; }, 800);
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+        document.body.style.opacity = '1';
+    });
+});
+
 </script>
 </body>
 </html>

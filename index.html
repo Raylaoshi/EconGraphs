@@ -444,10 +444,11 @@ document.addEventListener('keydown', e => {
 </script>
 
 <script>
-  document.fonts.ready.then(() => {
-    document.body.style.opacity = '1';
+  requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+          document.body.style.opacity = '1';
+      });
   });
-  setTimeout(() => { document.body.style.opacity = '1'; }, 800);
 </script>
 
 </body>

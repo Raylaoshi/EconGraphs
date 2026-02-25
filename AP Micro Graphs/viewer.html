@@ -391,9 +391,11 @@ document.addEventListener('DOMContentLoaded', function () {
         }, true);
     }
 
-    // Reveal page after fonts load — 800ms fallback for China
-    document.fonts.ready.then(() => { document.body.style.opacity = '1'; });
-    setTimeout(() => { document.body.style.opacity = '1'; }, 800);
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            document.body.style.opacity = '1';
+        });
+    });
 });
 </script>
 

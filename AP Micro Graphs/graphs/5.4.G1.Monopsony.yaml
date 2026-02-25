@@ -1,0 +1,262 @@
+title: Monopsony
+title_zh: 买方垄断
+label: 5.4.G1
+eyebrow: Unit 5 — Factor Markets
+eyebrow_zh: 第五单元 — 要素市场
+description: |
+
+  <p>Drag the point along the Labor axis to explore how a monopsonist decides how much labor to hire and what wage to pay. Use the checkboxes to compare the monopsony outcome against perfect competition.</p>
+  <strong>Key features of a monopsony labor market:</strong>
+  <ol>
+      <li>The monopsonist faces an <strong>upward-sloping</strong> labor supply curve — to hire one more worker, it must raise wages for <strong>all</strong> existing workers, not just the new hire.</li>
+      <li>This makes the <strong>Marginal Factor Cost of Labor (MFC<sub>L</sub>)</strong> rise at <strong>twice the rate</strong> of the supply curve, lying above it at every quantity.</li>
+      <li>The <strong>Wage Raise</strong> arrow shows the additional wage cost paid to all existing workers when one more worker is hired — the gap between S<sub>L</sub> and MFC<sub>L</sub>.</li>
+      <li>The monopsonist maximizes profit by hiring where <strong>MFC<sub>L</sub> = MRP<sub>L</sub></strong>, then paying the wage read off the <strong>supply curve</strong> at that quantity — below MRP<sub>L</sub>.</li>
+      <li>Compared to a perfectly competitive labor market, monopsony results in <strong>fewer workers hired</strong> and <strong>lower wages</strong>, generating a <strong>deadweight loss</strong>.</li>
+  </ol>
+
+description_zh: |
+
+  <p>沿劳动力轴拖动端点，探索买方垄断者如何决定雇用多少劳动力及支付多少工资。使用复选框将买方垄断结果与完全竞争结果进行比较。</p>
+  <strong>买方垄断劳动力市场的关键特征：</strong>
+  <ol>
+      <li>买方垄断者面对一条<strong>向上倾斜</strong>的劳动力供给曲线——每多雇一名工人，必须为<strong>所有</strong>现有工人提高工资，而不仅仅是新雇员。</li>
+      <li>这使得<strong>边际要素成本（MFC<sub>L</sub>）</strong>的上升速度是供给曲线的<strong>两倍</strong>，在每个产量水平上均位于供给曲线<strong>上方</strong>。</li>
+      <li><strong>工资提升</strong>箭头显示了多雇一名工人时，支付给所有现有工人的额外工资成本——即S<sub>L</sub>与MFC<sub>L</sub>之间的差距。</li>
+      <li>买方垄断者通过在<strong>MFC<sub>L</sub> = MRP<sub>L</sub></strong>处雇用劳动力来实现利润最大化，然后从该产量对应的<strong>供给曲线</strong>上确定工资——低于MRP<sub>L</sub>。</li>
+      <li>与完全竞争劳动力市场相比，买方垄断导致<strong>雇用工人更少</strong>、<strong>工资更低</strong>，并产生<strong>无谓损失</strong>。</li>
+  </ol>
+
+schema: EconSchema
+params:
+  - {name: L, value: 1, min: 0, max: 15, round: 0.1}
+  - {name: ProductivityFactor, value: 1, min: 0.25, max: 1, round: 0.25}
+  - {name: ProductPrice, value: 10, min: 5, max: 20, round: 1}
+  - {name: supplyShift, value: 0, min: 0, max: 50, round: 5}
+  - {name: showPC, value: false}
+  - {name: showM, value: false}
+
+calcs:
+  # Marginal Product: MP = ProductivityFactor * (30 - 2.5*L)
+  MP: ((params.ProductivityFactor) * (30 - 2.5 * (params.L)))
+
+  # Marginal Revenue Product: MRP = P × MP
+  MRP: ((params.ProductPrice) * (calcs.MP))
+  
+  # Labor Supply: W = 0 + 25*L + supplyShift
+  laborSupply: (0 + 25 * (params.L) + (params.supplyShift))
+  
+  # Marginal Factor Cost of Labor: MFCL = 0 + 50*L + supplyShift (slope is 2x supply slope)
+  MFCL: (0 + 50 * (params.L) + (params.supplyShift))
+  
+  # Monopsony equilibrium: MFCL = MRP
+  # 50*L + supplyShift = ProductPrice * ProductivityFactor * (30 - 2.5*L)
+  monopsonyL: (((30 * (params.ProductPrice) * (params.ProductivityFactor)) - (params.supplyShift)) / (50 + 2.5 * (params.ProductPrice) * (params.ProductivityFactor)))
+  
+  # Wage paid at monopsony equilibrium (on supply curve)
+  monopsonyW: (0 + 25 * (calcs.monopsonyL) + (params.supplyShift))
+  
+  # MRP at monopsony equilibrium
+  monopsonyMRP: ((params.ProductPrice) * (params.ProductivityFactor) * (30 - 2.5 * (calcs.monopsonyL)))
+  
+  # Competitive equilibrium: Supply = Demand (S_L = MRP_L)
+  # 25*L + supplyShift = ProductPrice * ProductivityFactor * (30 - 2.5*L)
+  competitiveL: (((30 * (params.ProductPrice) * (params.ProductivityFactor)) - (params.supplyShift)) / (25 + 2.5 * (params.ProductPrice) * (params.ProductivityFactor)))
+  competitiveW: (0 + 25 * (calcs.competitiveL) + (params.supplyShift))
+  
+  # Exploitation (difference between MRP and wage paid)
+  WageRaise: ((calcs.MFCL) - (calcs.laborSupply))
+
+  MarginalProfit: (calcs.MRP) - (calcs.MFCL)
+
+layout:
+  OneGraphPlusSidebar:
+    graph:
+      xAxis:
+        title: Labor (L)
+        max: 10
+        ticks: 10
+      yAxis:
+        title: Wage (W)
+        max: 300
+        min: 0
+        ticks: 6
+      objects:
+        # Labor Supply curve: W = 0 + 25*L + supplyShift
+        - Line:
+            yIntercept: (0 + (params.supplyShift))
+            slope: 25
+            color: orange
+            strokeWidth: 3
+            max: 15
+            label:
+              text: "`S_L`"
+              x: 9
+              position: bl
+            drag:
+              - vertical: supplyShift
+        
+        # Marginal Factor Cost of Labor: MFCL = 0 + 50*L + supplyShift
+        - Line:
+            yIntercept: (0 + (params.supplyShift))
+            slope: 50
+            color: red
+            strokeWidth: 3
+            label:
+              text: "`MFC_L`"
+              x: 5
+              position: b
+        
+        # Labor Demand (MRP_L): MRP = ProductPrice * ProductivityFactor * (30 - 2.5*L)
+        - Curve:
+            fn: ((params.ProductPrice) * (params.ProductivityFactor) * (30 - 2.5 * (x)))
+            color: blue
+            strokeWidth: 3
+            label:
+              text: "`D_L = MRP_L`"
+              x: 9
+              position: tl
+        
+        # Monopsony equilibrium point (MFCL = MRP_L)
+        - Point:
+            coordinates: [(calcs.monopsonyL), (calcs.monopsonyMRP)]
+            color: purple
+            r: 5
+            droplines:
+              vertical: "`L_M`"            
+            label:
+              text: "M" 
+              position: l
+              fontSize: 10
+            show: params.showM
+        
+        # Wage paid at monopsony equilibrium (on supply curve)
+        - Point:
+            coordinates: [(calcs.monopsonyL), (calcs.monopsonyW)]
+            color: purple
+            r: 5
+            droplines:
+              horizontal: "`W_M`"
+            show: params.showM
+              
+        # Competitive equilibrium (where S_L = D_L)
+        - Point:
+            coordinates: [(calcs.competitiveL), (calcs.competitiveW)]
+            color: green
+            r: 5
+            droplines:
+              vertical: "`L_C`"
+              horizontal: "`W_C`"
+            label:
+              text: "PC"
+              position: l
+              fontSize: 10
+            show: params.showPC
+        
+        # Draggable point on labor supply showing current wage
+        - Point:
+            coordinates: [(params.L), (calcs.laborSupply)]
+            color: orange
+            drag:
+              - horizontal: L
+            droplines:
+              horizontal: "`Wage = ${(calcs.laborSupply).toFixed(1)}`"
+        
+        # Point on MRP_L curve
+        - Point:
+            coordinates: [(params.L), (calcs.MRP)]
+            color: blue
+            drag:
+              - horizontal: L
+            droplines:
+              vertical: params.L.toFixed(1)
+              horizontal: "`MRP_L = ${(calcs.MRP).toFixed(1)}`"
+        
+        # Point on MFC_L curve
+        - Point:
+            coordinates: [(params.L), (calcs.MFCL)]
+            color: red
+            drag:
+              - horizontal: L
+            droplines:
+              horizontal: "`MFC_L = ${(calcs.MFCL).toFixed(1)}`"
+        
+        # Marginal profit arrow at current L
+        - Arrow:
+            begin: [(params.L), (calcs.MFCL)]
+            end: [(params.L), (calcs.MRP)]
+            color: blue
+            strokeWidth: 1.5
+            trim: 0.05
+            double: true
+            show: ((params.L) > 0 && (params.L) <= calcs.monopsonyL)            
+            label:
+              text: "`Marginal \\\\ Profit`"
+              position: r
+              fontSize: 9
+              bgcolor: none
+
+        # Wage Raise arrow at current L
+        - Arrow:
+            begin: [(params.L), (calcs.laborSupply)]
+            end: [(params.L), (calcs.MFCL)]
+            color: red
+            strokeWidth: 1.5
+            trim: 0.05
+            double: true
+            label:
+              text: "`Wage \\\\ Raise`"
+              position: r
+              fontSize: 9
+              bgcolor: none
+        
+        # Deadweight loss area (between competitive and monopsony)
+        - Area:
+            fn1: ((params.ProductPrice) * (params.ProductivityFactor) * (30 - 2.5 * (x)))
+            fn2: (0 + 25 * (x) + (params.supplyShift))
+            min: (calcs.monopsonyL)
+            max: (calcs.competitiveL)
+            color: red
+            opacity: 0.15
+            show: params.showM
+            
+        
+        # Label for deadweight loss
+        - Label:
+            coordinates: [((calcs.monopsonyL + calcs.competitiveL) / 2),  calcs.competitiveW]
+            text: "DWL"
+            color: red
+            fontSize: 11
+            bgcolor: none
+            show: params.showM
+    
+    sidebar:
+      controls:
+        - title: Monopsony Labor Market
+          sliders:
+            - param: L
+              label: Labor
+            - param: ProductPrice
+              label: Product Price
+            - param: ProductivityFactor
+              label: Productivity Factor
+            - param: supplyShift
+              label: Supply Shift
+          checkboxes:
+            - param: showPC
+              label: "\\text{Show Perfect Competition}"
+            - param: showM
+              label: "\\text{Show Monopsony}"                  
+          divs:
+            - html: "`<hr/><b>Monopsony Outcome:</b>`"
+            - html: "`Labor hired: <b>L<sub>M</sub> = ${calcs.monopsonyL.toFixed(1)}</b>`"
+            - html: "`Wage paid: <b>W<sub>M</sub> = $${calcs.monopsonyW.toFixed(1)}</b>`"
+            - html: "`<hr/><b>Competitive Outcome:</b>`"
+            - html: "`Labor: <b>L<sub>C</sub> = ${calcs.competitiveL.toFixed(1)}</b>`"
+            - html: "`Wage: <b>W<sub>C</sub> = $${calcs.competitiveW.toFixed(1)}</b>`"
+            - html: "`<hr/><b>At current L = ${params.L.toFixed(1)}:</b>`"
+            - html: "`MRP: <b>$${calcs.MRP.toFixed(1)}</b>`"
+            - html: "`MFC<sub>L</sub>: <b>$${calcs.MFCL.toFixed(1)}</b>`"
+            - html: "`Wage (S<sub>L</sub>): <b>$${calcs.laborSupply.toFixed(1)}</b>`"            
+            - html: "`Worker Raise: <b>$${calcs.WageRaise.toFixed(1)}</b>`"
+            - html: "`Monopsony hires fewer workers at lower wages, creating deadweight loss.`"

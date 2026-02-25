@@ -1,46 +1,26 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>Marginal Revenue Product of Labor</title>
-    <link href="https://raylaoshi.github.io/AP.Econ.Graphs/lib/kg.0.4.0.css" rel="stylesheet" type="text/css">
-    <script src="https://raylaoshi.github.io/AP.Econ.Graphs/lib/kg.0.4.0.js"></script>
-    
-    <style>
-      .kg-container {
-        user-select: none;
-        -webkit-user-select: none;
-        opacity: 0;
-        transition: opacity 0.4s ease;
-      }
-      /* Only disable pointer events on non-draggable decorative elements */
-      svg text {
-        pointer-events: none;
-      }
-    </style>
-
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const container = document.querySelector('.kg-container');
-        if (container) {
-          container.addEventListener('mousedown', function(e) {
-            if (e.target.closest('svg')) {
-              e.preventDefault();
-            }
-          }, true);
-
-          // Reveal after KG has had time to render
-          setTimeout(() => { container.style.opacity = '1'; }, 400);
-        }
-      });
-    </script>
-</head>
-
-<body>
-
-  <div class="kg-container">
-
+title: Marginal Revenue Product of Labor
+title_zh: 劳动力边际收益产品
+label: 5.1.G1
+eyebrow: Unit 5 — Factor Markets
+eyebrow_zh: 第五单元 — 要素市场
+description: |
+  <p>This model shows how a firm's demand for labor is <strong>derived from the product market</strong>. The three graphs are linked — changes in product demand or worker productivity ripple through to affect how much labor a firm is willing to hire.</p>
+  <strong>Key relationships to observe:</strong>
+  <ol>
+    <li>In a perfectly competitive product market, <strong>MR = P</strong>, so the Marginal Revenue Product of Labor is <strong>MRP<sub>L</sub> = P × MP<sub>L</sub></strong>.</li>
+    <li>Due to <strong>diminishing marginal returns</strong>, MP<sub>L</sub> eventually falls as more labor is hired — causing the MRP<sub>L</sub> curve to slope downward.</li>
+    <li>A shift in product demand changes the output price (P), which <strong>shifts the entire MRP<sub>L</sub> curve</strong> — this is why labor demand is called a <em>derived demand</em>.</li>
+  </ol>
+description_zh: |
+  <p>本模型展示了企业对劳动力的需求如何<strong>源于产品市场</strong>。三张图表相互联动——产品需求或工人生产率的变化，都会影响企业愿意雇用的劳动力数量。</p>
+  <strong>重点观察以下关系：</strong>
+  <ol>
+    <li>在完全竞争的产品市场中，<strong>MR = P</strong>，因此劳动力的边际收益产品为 <strong>MRP<sub>L</sub> = P × MP<sub>L</sub></strong>。</li>
+    <li>由于<strong>边际收益递减规律</strong>，随着雇用劳动力增加，MP<sub>L</sub> 最终下降，导致 MRP<sub>L</sub> 曲线向右下方倾斜。</li>
+    <li>产品需求的变动会改变产品价格（P），进而<strong>整体移动 MRP<sub>L</sub> 曲线</strong>——这正是劳动力需求被称为<em>派生需求</em>的原因。</li>
+  </ol>
 schema: EconSchema
+
 params:
   - name: L
     value: 4
@@ -104,7 +84,7 @@ layout:
               droplines:
                 horizontal: "`MR = P = ${calcs.ourEquilibrium.P.toFixed(1)}`"  
     leftControls:
-      title: Product Market (Perfect Competition)
+      title: PC Product Market
       sliders:
         - param: demandShift
           label: \text{Demand Shift}
@@ -210,9 +190,3 @@ layout:
       divs:
       - html: '`The <b>${params.L}th</b> labor produces a value of <b>$ ${calcs.mrp.toFixed(1)}</b> in marginal revenue product.`'      
       - html: The marginal revenue product of labor is the value of the additional output produced by an additional unit of labor, which is equal to the price of the output <b> (or marginal revenue) </b> times the marginal product of labor.
-   
-  </div>
-
-            
-</body>
-</html>

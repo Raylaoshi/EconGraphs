@@ -1,155 +1,136 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>TVC, TFC and TC</title>
-    <link href="https://raylaoshi.github.io/AP.Econ.Graphs/lib/kg.0.4.0.css" rel="stylesheet" type="text/css">
-    <script src="https://raylaoshi.github.io/AP.Econ.Graphs/lib/kg.0.4.0.js"></script>
-    
-    <style>
-      .kg-container {
-        user-select: none;
-        -webkit-user-select: none;
-        opacity: 0;
-        transition: opacity 0.4s ease;
-      }
-      /* Only disable pointer events on non-draggable decorative elements */
-      svg text {
-        pointer-events: none;
-      }
-    </style>
+title: TVC, TFC and TC
+title_zh: 总可变成本，总固定成本与总成本
+label: 3.3.G2
+eyebrow: Unit 3 — Production, Cost, and Perfect Competition
+eyebrow_zh:
+description: |
 
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const container = document.querySelector('.kg-container');
-        if (container) {
-          container.addEventListener('mousedown', function(e) {
-            if (e.target.closest('svg')) {
-              e.preventDefault();
-            }
-          }, true);
+  <p>Drag the point along the quantity axis to observe how TVC, TFC, and TC change with output. Adjust the TFC slider to see how a change in fixed cost affects the cost curves.</p>
+  <strong>Key relationships between the three cost curves:</strong>
+  <ol>
+      <li><strong>TFC</strong> is constant at all levels of output — it does not change with quantity, appearing as a horizontal line.</li>
+      <li><strong>TVC</strong> starts at zero and rises with output. Its S-shape reflects the law of diminishing marginal returns: TVC rises at a decreasing rate when MP is rising, and at an increasing rate when MP is falling.</li>
+      <li><strong>TC = TFC + TVC</strong> — the TC curve is the TVC curve shifted <strong>upward</strong> by the amount of TFC. TC and TVC therefore share the same shape and curvature.</li>
+      <li>The <strong>vertical distance</strong> between TC and TVC is always equal to TFC, regardless of the quantity produced.</li>
+  </ol>
 
-          // Reveal after KG has had time to render
-          setTimeout(() => { container.style.opacity = '1'; }, 400);
-        }
-      });
-    </script>
-</head>
+description_zh: |
 
-<body>
+  <p>沿产量轴拖动端点，观察TVC、TFC和TC如何随产量变化。调整TFC滑块，观察固定成本变化对成本曲线的影响。</p>
+  <strong>三条成本曲线之间的关键关系：</strong>
+  <ol>
+      <li><strong>TFC</strong> 在所有产量水平上保持不变——不随产量变化，表现为一条水平线。</li>
+      <li><strong>TVC</strong> 从零开始随产量上升，其S形曲线反映了边际报酬递减规律：当MP上升时，TVC以递减速率增加；当MP下降时，TVC以递增速率增加。</li>
+      <li><strong>TC = TFC + TVC</strong> —— TC曲线是TVC曲线向<strong>上</strong>平移TFC数量后的结果，因此TC与TVC具有相同的形状和曲率。</li>
+      <li>无论产量为多少，TC与TVC之间的<strong>垂直距离</strong>始终等于TFC。</li>
+  </ol>
 
-  <div class="kg-container">
-    params:
-      - name: TFC
-        value: 50
-        min: 20
-        max: 80
-      - name: q
-        value: 12
+schema: EconSchema
+params:
+  - name: TFC
+    value: 50
+    min: 20
+    max: 80
+  - name: q
+    value: 12
+    max: 20
+    round: 0.1
+
+calcs:
+  tvc: (1/12)*params.q^3 - 2*params.q^2 + 20*params.q
+  tc: params.TFC + (1/12)*params.q^3 - 2*params.q^2 + 20*params.q
+
+layout:
+  OneGraphPlusSidebar:
+    graph:
+      xAxis:
+        title: Quantity
         max: 20
-        round: 0.1
+      yAxis:
+        title: Cost
+        max: 250
 
-    calcs:
-      tvc: (1/12)*params.q^3 - 2*params.q^2 + 20*params.q
-      tc: params.TFC + (1/12)*params.q^3 - 2*params.q^2 + 20*params.q
-
-    layout:
-      OneGraphPlusSidebar:
-        graph:
-          xAxis:
-            title: Quantity
-            max: 20
-          yAxis:
-            title: Cost
-            max: 250
-
-          objects:
-            # Total Fixed Cost (TFC) - horizontal line
-            - Line:
-                yIntercept: params.TFC
-                slope: 0
-                color: blue
-                strokeWidth: 2
-                label:
-                  text: TFC
-                  x: 20
-            
-            # Point on TFC
-            - Point:
-                coordinates: [params.q, params.TFC]
-                color: blue
-                drag:
-                  - horizontal: q
-                droplines:
-                  vertical: params.q.toFixed(1)
-
-            # Total Variable Cost (TVC) - cubic function
-            - Curve:
-                fn: (1/12)*(x)^3 - 2*(x)^2 + 20*(x)
-                color: green
-                strokeWidth: 2
-                label:
-                  text: TVC
-                  x: 16
-            
-            # Point on TVC
-            - Point:
-                coordinates: [params.q, calcs.tvc]
-                color: green
-                drag:
-                  - horizontal: q
-                droplines:
-                  vertical:
-                  horizontal: calcs.tvc.toFixed(1)
-            
-            # Total Cost (TC) - TFC + TVC
-            - Curve:
-                fn: params.TFC + (1/12)*(x)^3 - 2*(x)^2 + 20*(x)
-                color: red
-                strokeWidth: 2
-                label:
-                  text: TC
-                  x: 17
-            
-            # Point on TC
-            - Point:
-                coordinates: [params.q, calcs.tc]
-                color: red
-                drag:
-                  - horizontal: q
-                droplines:
-                  vertical: params.q.toFixed(1)
-                  horizontal: calcs.tc.toFixed(1)
-            
-            # Vertical arrow showing TFC distance between TVC and TC
-            - Arrow:
-                begin: [params.q , calcs.tvc]
-                end: [params.q , calcs.tc]
-                color: blue
-                strokeWidth: 1.5
-                double: true
-                trim: 0.1
-            
-            # Label for the distance
-            - Label:
-                coordinates: [params.q, (calcs.tvc + calcs.tc)/2]
-                text: "`TFC = ${params.TFC.toFixed(0)}`"
-                color: blue
-                fontSize: 10
+      objects:
+        # Total Fixed Cost (TFC) - horizontal line
+        - Line:
+            yIntercept: params.TFC
+            slope: 0
+            color: blue
+            strokeWidth: 2
+            label:
+              text: TFC
+              x: 20
         
-        sidebar:
-          controls:
-            - title: Total Cost Curves
-              sliders:
-                - param: TFC
-                  label: TFC
-              divs:
-                - html: "`<hr/>$Quantity = ${params.q.toFixed(1)}$`"
-                - html: "`$TVC = ${calcs.tvc.toFixed(1)}$`"
-                - html: "`$TC = ${calcs.tc.toFixed(1)}$`"
-    
-  </div>
+        # Point on TFC
+        - Point:
+            coordinates: [params.q, params.TFC]
+            color: blue
+            drag:
+              - horizontal: q
+            droplines:
+              vertical: params.q.toFixed(1)
 
-            
-</body>
-</html>
+        # Total Variable Cost (TVC) - cubic function
+        - Curve:
+            fn: (1/12)*(x)^3 - 2*(x)^2 + 20*(x)
+            color: green
+            strokeWidth: 2
+            label:
+              text: TVC
+              x: 16
+        
+        # Point on TVC
+        - Point:
+            coordinates: [params.q, calcs.tvc]
+            color: green
+            drag:
+              - horizontal: q
+            droplines:
+              vertical:
+              horizontal: calcs.tvc.toFixed(1)
+        
+        # Total Cost (TC) - TFC + TVC
+        - Curve:
+            fn: params.TFC + (1/12)*(x)^3 - 2*(x)^2 + 20*(x)
+            color: red
+            strokeWidth: 2
+            label:
+              text: TC
+              x: 17
+        
+        # Point on TC
+        - Point:
+            coordinates: [params.q, calcs.tc]
+            color: red
+            drag:
+              - horizontal: q
+            droplines:
+              vertical: params.q.toFixed(1)
+              horizontal: calcs.tc.toFixed(1)
+        
+        # Vertical arrow showing TFC distance between TVC and TC
+        - Arrow:
+            begin: [params.q , calcs.tvc]
+            end: [params.q , calcs.tc]
+            color: blue
+            strokeWidth: 1.5
+            double: true
+            trim: 0.1
+        
+        # Label for the distance
+        - Label:
+            coordinates: [params.q, (calcs.tvc + calcs.tc)/2]
+            text: "`TFC = ${params.TFC.toFixed(0)}`"
+            color: blue
+            fontSize: 10
+    
+    sidebar:
+      controls:
+        - title: Total Cost Curves
+          sliders:
+            - param: TFC
+              label: TFC
+          divs:
+            - html: "`<hr/>$Quantity = ${params.q.toFixed(1)}$`"
+            - html: "`$TVC = ${calcs.tvc.toFixed(1)}$`"
+            - html: "`$TC = ${calcs.tc.toFixed(1)}$`"

@@ -7,7 +7,7 @@ description: |
 
   <p>Drag the point along the Labor axis to observe how the Total Variable Cost (TVC) curve is derived from the Total Product (TP) curve.</p>
   <strong>The shape of TVC is determined by the shape of TP through the following logic chain:</strong>
-  <p><em>TP curve shape → marginal productivity → labor required per unit of output → TVC shape</em></p>
+  <p>TP curve shape → marginal productivity → labor required per unit of output → TVC shape</p>
   <ol>
       <li>L = 1~4: TP increases at an <strong>increasing</strong> rate → MP is <strong>rising</strong> → each additional unit of output requires <strong>less</strong> labor → TVC increases at a <strong>decreasing</strong> rate.</li>
       <li>L = 4~8: TP increases at a <strong>decreasing</strong> rate → MP is <strong>falling</strong> → each additional unit of output requires <strong>more</strong> labor → TVC increases at an <strong>increasing</strong> rate.</li>
@@ -17,7 +17,7 @@ description_zh: |
 
   <p>沿劳动力轴拖动端点，观察总可变成本（TVC）曲线如何从总产量（TP）曲线推导而来。</p>
   <strong>TVC的形状由TP的形状通过以下逻辑链决定：</strong>
-  <p><em>TP曲线形状 → 边际生产率 → 每单位产量所需劳动力 → TVC形状</em></p>
+  <p>TP曲线形状 → 边际生产率 → 每单位产量所需劳动力 → TVC形状</p>
   <ol>
       <li>L = 1~4：TP以<strong>递增</strong>速率增加 → MP<strong>上升</strong> → 每增加一单位产量所需劳动力<strong>减少</strong> → TVC以<strong>递减</strong>速率增加。</li>
       <li>L = 4~8：TP以<strong>递减</strong>速率增加 → MP<strong>下降</strong> → 每增加一单位产量所需劳动力<strong>增加</strong> → TVC以<strong>递增</strong>速率增加。</li>

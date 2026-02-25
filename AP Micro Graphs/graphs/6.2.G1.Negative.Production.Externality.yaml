@@ -1,70 +1,34 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>Negative Consumption Externality</title>
-    <link href="https://raylaoshi.github.io/AP.Econ.Graphs/lib/kg.0.4.0.css" rel="stylesheet" type="text/css">
-    <script src="https://raylaoshi.github.io/AP.Econ.Graphs/lib/kg.0.4.0.js"></script>
-    
-    <style>
-      .kg-container {
-        user-select: none;
-        -webkit-user-select: none;
-        opacity: 0;
-        transition: opacity 0.4s ease;
-      }
-      /* Only disable pointer events on non-draggable decorative elements */
-      svg text {
-        pointer-events: none;
-      }
-    </style>
+title: Negative Production Externality
+title_zh: 生产负外部性
+label: 6.2.G1
+eyebrow: Unit 6 — Market Failure and the Role of Government
+eyebrow_zh: 第六单元 — 市场失灵与政府治理
+description: |
+description_zh: |
 
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const container = document.querySelector('.kg-container');
-        if (container) {
-          container.addEventListener('mousedown', function(e) {
-            if (e.target.closest('svg')) {
-              e.preventDefault();
-            }
-          }, true);
-
-          // Reveal after KG has had time to render
-          setTimeout(() => { container.style.opacity = '1'; }, 400);
-        }
-      });
-    </script>
-</head>
-
-<body>
-<div class="kg-container">
 schema: EconSchema
 params:
+  - {name: MEC, value: 40, min: 30, max: 50, round: 1}
   - {name: showTotalExternalCost, value: false}
   - {name: showTolerableExternalCost, value: false}
-  - {name: showDemandCurve, value: true}
-  - {name: MEC, value: 40, min: 30, max: 50, round: 1}
+  - {name: showSupplyCurve, value: true}
   - {name: tax, value: 0, min: 0, max: 50, round: 1}
 
 calcs:
-  # MSB intercept
-  MSBIntercept: (120 - (params.MEC))
-
-  # Taxed demand shifts DOWN by tax: (120-tax-Q) = Q → Q = (120-tax)/2
+  # Taxed supply shifts up by tax: Q + tax =120 - Q → Q = (120 - tax)/2
   taxedQ: ((120 - (params.tax)) / 2)
-  taxedP: ((120 - (params.tax)) / 2)
+  taxedP: ((120 + (params.tax)) / 2)
 
-  # Social optimum (MSB = MSC)
-  socialQ: ((calcs.MSBIntercept) / 2)
-  socialP: ((calcs.MSBIntercept) / 2)
+  # Social optimum (MSC = MPB)
+  socialQ: ((120 - (params.MEC)) / 2)
+  socialP: ((120 + (params.MEC)) / 2)
 
-  # MPB, MSB, MSC at taxed market output
-  MPB_at_market: (120 - (calcs.taxedQ))
-  MSB_at_market: ((calcs.MSBIntercept) - (calcs.taxedQ))
-  MSC_at_market: (calcs.taxedQ)
+  # MSB and MSC at taxed market output
+  MSB_at_market: (120 - (calcs.taxedQ))
+  MSC_at_market: ((params.MEC) + (calcs.taxedQ))
 
-  # Overconsumption from taxed equilibrium to social optimum
-  overconsumption: ((calcs.taxedQ) - (calcs.socialQ))
+  # Overproduction from taxed equilibrium to social optimum
+  overproduction: ((calcs.taxedQ) - (calcs.socialQ))
 
 layout:
   OneGraphPlusSidebar:
@@ -82,67 +46,67 @@ layout:
         # Title
         - Label:
             coordinates: [50, 115]
-            text: \text{Negative Consumption Externality with Pigouvian Tax}
+            text: \text{Negative Production Externality with Pigouvian Tax}
             fontSize: 13
             color: black
             position: b
             bgcolor: none
 
-        # Taxed Demand = MPB - tax — draggable
-        - Line:
-            yIntercept: (120 - (params.tax))
-            slope: -1
-            color: blue
-            strokeWidth: 3
-            drag:
-              - vertical: tax
-            label:
-              text: "`D_{Tax}`"
-              x: 90
-              position: b
-            show: (params.showDemandCurve)
-
-        # Original Demand = MPB — dotted, shown by checkbox
+        # Demand = MPB = MSB
         - Line:
             yIntercept: 120
             slope: -1
             color: blue
-            strokeWidth: 2
-            lineStyle: dotted
-            show: (params.showDemandCurve)
+            strokeWidth: 3
             label:
-              text: "`D = MPB`"
+              text: "`D = MPB = MSB`"
               x: 90
-              position: b
+              position: t
 
-        # Supply = MPC = MSC
+        # Taxed Supply = MPC + tax — draggable, shown when tax > 0
+        - Line:
+            yIntercept: (params.tax)
+            slope: 1
+            color: orange
+            strokeWidth: 3
+            drag:
+              - vertical: tax
+            label:
+              text: "`S_{Tax}`"
+              x: 80
+              position: bl
+            show: params.showSupplyCurve
+
+        # Original Supply = MPC — dotted when tax > 0
         - Line:
             yIntercept: 0
             slope: 1
             color: orange
-            strokeWidth: 3
+            strokeWidth: 2
+            lineStyle: dotted
             label:
-              text: "`S = MPC = MSC`"
-              x: 90
+              text: "`S = MPC`"
+              x: 80
               position: bl
+            show: params.showSupplyCurve
 
-        # MSB = MPB - MEC
+        # MSC = MPC + MEC
         - Line:
-            yIntercept: (calcs.MSBIntercept)
-            slope: -1
-            color: green
+            yIntercept: (params.MEC)
+            slope: 1
+            color: red
             strokeWidth: 3
             drag:
               - vertical: MEC
             label:
-              text: MSB
-              x: 75
-              position: t
+              text: MSC
+              x: 80
+              position: bl
 
-        # MEC arrow at taxedQ — from MPB down to MSB
+        # MEC arrow at taxed Q
         - Segment:
-            a: [(calcs.taxedQ), (calcs.MPB_at_market)]
-            b: [(calcs.taxedQ), (calcs.MSB_at_market)]
+            a: [(calcs.taxedQ), (calcs.taxedQ)]
+            b: [(calcs.taxedQ), ((calcs.taxedQ) + (params.MEC))]
             color: red
             strokeWidth: 2
             lineStyle: solid
@@ -155,10 +119,10 @@ layout:
               position: l
               bgcolor: none
 
-        # Tax arrow at socialQ — from taxed MPB up to original MPB
+        # Tax arrow at social Q — from MPC to taxed supply (mirrors subsidy arrow)
         - Segment:
-            a: [(calcs.socialQ), (120 - (params.tax) - (calcs.socialQ))]
-            b: [(calcs.socialQ), (120 - (calcs.socialQ))]
+            a: [(calcs.socialQ), (calcs.socialQ)]
+            b: [(calcs.socialQ), ((calcs.socialQ) + (params.tax))]
             color: purple
             strokeWidth: 2
             lineStyle: solid
@@ -174,8 +138,8 @@ layout:
 
         # Tolerable External Cost (0 to Q*)
         - Area:
-            fn1: 120 - (x)
-            fn2: (calcs.MSBIntercept) - (x)
+            fn1: (params.MEC) + (x)
+            fn2: (x)
             min: 0
             max: (calcs.socialQ)
             color: green
@@ -184,7 +148,7 @@ layout:
 
         # Tolerable External Cost Label
         - Label:
-            coordinates: [(calcs.socialQ / 2), (120 - (calcs.socialQ / 2) - (params.MEC / 2))]
+            coordinates: [(calcs.socialQ / 2), ((calcs.socialQ + params.MEC) / 2)]
             text: \text{Tolerable EC}
             color: green
             fontSize: 11
@@ -193,8 +157,8 @@ layout:
 
         # EC Incurred (0 to taxedQ) — shrinks as tax increases
         - Area:
-            fn1: 120 - (x)
-            fn2: (calcs.MSBIntercept) - (x)
+            fn1: (params.MEC) + (x)
+            fn2: (x)
             min: 0
             max: (calcs.taxedQ)
             color: orange
@@ -203,17 +167,17 @@ layout:
 
         # EC Incurred Label
         - Label:
-            coordinates: [(calcs.taxedQ / 2), (120 - (calcs.taxedQ / 2) - (params.MEC / 2))]
+            coordinates: [(calcs.taxedQ / 2), ((calcs.taxedQ / 2) + (params.MEC / 2))]
             text: \text{EC Incurred}
             color: orange
             fontSize: 11
             bgcolor: none
             show: (params.showTotalExternalCost)
 
-        # DWL triangle (overconsumption from socialQ to taxedQ)
+        # DWL triangle (overproduction from Q* to taxedQ)
         - Area:
-            fn1: (calcs.MSBIntercept) - (x)
-            fn2: (x)
+            fn1: (params.MEC) + (x)
+            fn2: 120- (x)
             min: (calcs.socialQ)
             max: (calcs.taxedQ)
             color: red
@@ -228,9 +192,9 @@ layout:
             bgcolor: none
             show: (calcs.taxedQ) != (calcs.socialQ)
 
-        # Overconsumption arrow (from socialQ to taxedQ)
+        # Overproduction arrow (from Q* to taxedQ)
         - Segment:
-            a: [(calcs.socialQ),5]
+            a: [(calcs.socialQ), 5]
             b: [(calcs.taxedQ), 5]
             color: grey
             strokeWidth: 2
@@ -238,18 +202,13 @@ layout:
             endArrow: true
             startArrow: true
             trim: 0.05
-            show: (calcs.overconsumption) > 0.5
+            show: (calcs.overproduction) > 0.5
             label:
-              text: "`Overconsumption = ${calcs.overconsumption.toFixed(0)}`"
+              text: "`Overproduction = ${calcs.overproduction.toFixed(0)}`"
               position: b
               fontSize: 10
               bgcolor: none
-        # Social optimum point
-        - Point:
-            coordinates: [(calcs.socialQ), (calcs.socialP)]
-            color: green
-            droplines:
-              vertical: "`Q_{So} = ${calcs.socialQ.toFixed(0)}`"
+
         # Original private equilibrium — faded when tax > 0
         - Point:
             coordinates: [60, 60]
@@ -259,6 +218,13 @@ layout:
             droplines:
               vertical: "`Q_{no tax} = 60`"
 
+        # Social optimum point
+        - Point:
+            coordinates: [(calcs.socialQ), (calcs.socialP)]
+            color: green
+            droplines:
+              vertical: "`Q_{So} = ${calcs.socialQ.toFixed(0)}`"
+
         # Market equilibrium with tax
         - Point:
             coordinates: [(calcs.taxedQ), (calcs.taxedP)]
@@ -267,7 +233,7 @@ layout:
               vertical: "`Q_{MKT} = ${calcs.taxedQ.toFixed(0)}`"
               horizontal: "`P_{MKT} = ${calcs.taxedP.toFixed(0)}`"
 
-        # Private equilibrium — shown when tax = 0
+        # Private equilibrium point — shown when tax = 0
         - Point:
             coordinates: [60, 60]
             color: grey
@@ -279,7 +245,7 @@ layout:
         # MSB at taxed market output
         - Point:
             coordinates: [(calcs.taxedQ), (calcs.MSB_at_market)]
-            color: green
+            color: blue
             r: 4
             label:
               text: "`MSB = ${calcs.MSB_at_market.toFixed(0)}`"
@@ -290,7 +256,7 @@ layout:
         # MSC at taxed market output
         - Point:
             coordinates: [(calcs.taxedQ), (calcs.MSC_at_market)]
-            color: orange
+            color: red
             r: 4
             label:
               text: "`MSC = ${calcs.MSC_at_market.toFixed(0)}`"
@@ -300,15 +266,15 @@ layout:
 
     sidebar:
       controls:
-        - title: Negative Consumption Externality
+        - title: Negative Production Externality
           sliders:
             - param: MEC
               label: \text{Marginal External Cost}
             - param: tax
               label: \text{Pigouvian Tax}
           checkboxes:
-            - param: showDemandCurve
-              label: \text{Show Original Demand}
+            - param: showSupplyCurve
+              label: \text{Show Supply Curve}
             - param: showTotalExternalCost
               label: \text{Show External Cost Incurred}
             - param: showTolerableExternalCost
@@ -321,12 +287,9 @@ layout:
             - html: "`<hr/><b>Policy:</b>`"
             - html: "`Current tax = $${params.tax.toFixed(0)}`"
             - html: "`Optimal tax = $${params.MEC.toFixed(0)}`"
-            - html: "`Remaining overconsumption = ${calcs.overconsumption.toFixed(0)} units`"
+            - html: "`Remaining overproduction = ${calcs.overproduction.toFixed(0)} units`"
             - html: <hr/><b>External Costs:</b>
             - html: <span style="color:orange">Orange area</span> - External cost incurred at Q<sub>MKT</sub>
             - html: <span style="color:green">Green area</span> - Tolerable external cost at Q<sub>So</sub>
-            - html: <span style="color:red">Red triangle</span> - Deadweight loss from overconsumption
-            - html: <hr/><i>Example - Smoking. Set tax = MEC to eliminate DWL!</i>
-</div>
-</body>
-</html>
+            - html: <span style="color:red">Red triangle</span> - Deadweight loss from overproduction
+            - html: <hr/><i>Example - Factory pollution. Set tax = MEC to eliminate DWL!</i>

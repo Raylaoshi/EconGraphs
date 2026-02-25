@@ -193,9 +193,44 @@
         /* force theme*/
         .kg-container div, 
         .kg-container span, 
-        .kg-container p,
+        .kg-container p {
+            font-family: 'Outfit', sans-serif !important;            
+            font-size: 0.9rem !important;
+        }
+
         .kg-container text {
             font-family: 'Outfit', sans-serif !important;
+        }
+        
+        /* ── KGJS Sidebar text overrides ── */
+
+        /* All plain text and divs inside sidebar */
+        .sidebar div,
+        .sidebar span,
+        .sidebar p {
+            font-size: 0.9rem !important;
+        }
+
+        /* Slider labels (has a class) */
+        .slider-label {
+            font-size: 0.9rem !important;
+        }
+
+        /* Slider number inputs (has a class) */
+        .slider-numberInput {
+            font-size: 0.9rem !important;
+            font-family: 'Outfit', sans-serif !important;
+           
+        }
+
+        /* Checkbox label (has a class) */
+        .checkbox-label {
+            font-size: 0.9rem !important;
+        }
+
+        /* Range slider track width if you want narrower sidebar */
+        .sidebar input[type="range"] {
+            width: 100% !important;
         }
 
         /* ── FOOTER ── */

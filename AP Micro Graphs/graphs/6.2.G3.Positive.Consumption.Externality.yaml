@@ -262,9 +262,9 @@ layout:
         - title: Positive Consumption Externality
           sliders:
             - param: MEB
-              label: \text{Marginal External Benefit}
+              label: \text{MEC}
             - param: subsidy
-              label: \text{Pigouvian Subsidy}
+              label: \text{Subsidy}
           checkboxes:
             - param: showDemandCurve
               label: \text{Show Demand Curve}

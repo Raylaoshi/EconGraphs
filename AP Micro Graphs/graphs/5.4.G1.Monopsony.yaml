@@ -30,7 +30,7 @@ description_zh: |
 schema: EconSchema
 params:
   - {name: L, value: 1, min: 0, max: 15, round: 0.1}
-  - {name: ProductivityFactor, value: 1, min: 0.25, max: 1, round: 0.25}
+  - {name: ProductivityFactor, value: 2, min: 1, max: 3, round: 1}
   - {name: ProductPrice, value: 10, min: 5, max: 20, round: 1}
   - {name: supplyShift, value: 0, min: 0, max: 50, round: 5}
   - {name: showPC, value: false}
@@ -38,7 +38,7 @@ params:
 
 calcs:
   # Marginal Product: MP = ProductivityFactor * (30 - 2.5*L)
-  MP: ((params.ProductivityFactor) * (30 - 2.5 * (params.L)))
+  MP: (((params.ProductivityFactor)/2) * (30 - 2.5 * (params.L)))
 
   # Marginal Revenue Product: MRP = P × MP
   MRP: ((params.ProductPrice) * (calcs.MP))
@@ -51,17 +51,17 @@ calcs:
   
   # Monopsony equilibrium: MFCL = MRP
   # 50*L + supplyShift = ProductPrice * ProductivityFactor * (30 - 2.5*L)
-  monopsonyL: (((30 * (params.ProductPrice) * (params.ProductivityFactor)) - (params.supplyShift)) / (50 + 2.5 * (params.ProductPrice) * (params.ProductivityFactor)))
+  monopsonyL: (((30 * (params.ProductPrice) * ((params.ProductivityFactor)/2)) - (params.supplyShift)) / (50 + 2.5 * (params.ProductPrice) * ((params.ProductivityFactor)/2)))
   
   # Wage paid at monopsony equilibrium (on supply curve)
   monopsonyW: (0 + 25 * (calcs.monopsonyL) + (params.supplyShift))
   
   # MRP at monopsony equilibrium
-  monopsonyMRP: ((params.ProductPrice) * (params.ProductivityFactor) * (30 - 2.5 * (calcs.monopsonyL)))
+  monopsonyMRP: ((params.ProductPrice) * ((params.ProductivityFactor)/2) * (30 - 2.5 * (calcs.monopsonyL)))
   
   # Competitive equilibrium: Supply = Demand (S_L = MRP_L)
   # 25*L + supplyShift = ProductPrice * ProductivityFactor * (30 - 2.5*L)
-  competitiveL: (((30 * (params.ProductPrice) * (params.ProductivityFactor)) - (params.supplyShift)) / (25 + 2.5 * (params.ProductPrice) * (params.ProductivityFactor)))
+  competitiveL: (((30 * (params.ProductPrice) * ((params.ProductivityFactor)/2)) - (params.supplyShift)) / (25 + 2.5 * (params.ProductPrice) * ((params.ProductivityFactor)/2)))
   competitiveW: (0 + 25 * (calcs.competitiveL) + (params.supplyShift))
   
   # Exploitation (difference between MRP and wage paid)
@@ -109,7 +109,7 @@ layout:
         
         # Labor Demand (MRP_L): MRP = ProductPrice * ProductivityFactor * (30 - 2.5*L)
         - Curve:
-            fn: ((params.ProductPrice) * (params.ProductivityFactor) * (30 - 2.5 * (x)))
+            fn: ((params.ProductPrice) * ((params.ProductivityFactor)/2) * (30 - 2.5 * (x)))
             color: blue
             strokeWidth: 3
             label:
@@ -212,7 +212,7 @@ layout:
         
         # Deadweight loss area (between competitive and monopsony)
         - Area:
-            fn1: ((params.ProductPrice) * (params.ProductivityFactor) * (30 - 2.5 * (x)))
+            fn1: ((params.ProductPrice) * ((params.ProductivityFactor)/2) * (30 - 2.5 * (x)))
             fn2: (0 + 25 * (x) + (params.supplyShift))
             min: (calcs.monopsonyL)
             max: (calcs.competitiveL)
@@ -237,11 +237,11 @@ layout:
             - param: L
               label: Labor
             - param: ProductPrice
-              label: Product Price
+              label: P_{product}
             - param: ProductivityFactor
-              label: Productivity Factor
+              label: Productivity
             - param: supplyShift
-              label: Supply Shift
+              label: Supply
           checkboxes:
             - param: showPC
               label: "\\text{Show Perfect Competition}"

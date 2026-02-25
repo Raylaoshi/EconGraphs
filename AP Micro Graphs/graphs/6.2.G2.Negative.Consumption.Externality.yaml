@@ -262,9 +262,9 @@ layout:
         - title: Negative Consumption Externality
           sliders:
             - param: MEC
-              label: \text{Marginal External Cost}
+              label: \text{MEC}
             - param: tax
-              label: \text{Pigouvian Tax}
+              label: \text{Tax}
           checkboxes:
             - param: showDemandCurve
               label: \text{Show Original Demand}

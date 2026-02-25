@@ -4,7 +4,15 @@ label: 6.2.G1
 eyebrow: Unit 6 — Market Failure and the Role of Government
 eyebrow_zh: 第六单元 — 市场失灵与政府治理
 description: |
+  <p><b>External Costs:</b></p>
+  <ol>
+    <li><span style="color:orange">Orange area</span> - External cost incurred at Q<sub>MKT</sub></li>
+    <li><span style="color:green">Green area</span> - Tolerable external cost at Q<sub>So</sub></li>
+    <li><span style="color:red">Red triangle</span> - Deadweight loss from overproduction</li>
+  <ol>
+  <p><i>Example - Factory pollution. Set tax = MEC to eliminate DWL!</i></p>
 description_zh: |
+            
 
 schema: EconSchema
 params:
@@ -260,9 +268,9 @@ layout:
         - title: Negative Production Externality
           sliders:
             - param: MEC
-              label: \text{Marginal External Cost}
+              label: \text{MEC}
             - param: tax
-              label: \text{Pigouvian Tax}
+              label: \text{Tax}
           checkboxes:
             - param: showSupplyCurve
               label: \text{Show Supply Curve}
@@ -279,9 +287,3 @@ layout:
             - html: "`Current tax = $${params.tax.toFixed(0)}`"
             - html: "`Optimal tax = $${params.MEC.toFixed(0)}`"
             - html: "`Remaining overproduction = ${calcs.overproduction.toFixed(0)} units`"
-            - html: "<hr/><b>External Costs:</b>"
-            - html: "<span style=\"color:orange\">Orange area</span> - External cost incurred at Q<sub>MKT</sub>"
-            - html: "<span style=\"color:green\">Green area</span> - Tolerable external cost at Q<sub>So</sub>"
-            - html: "<span style=\"color:red\">Red triangle</span> - Deadweight loss from overproduction"
-            - html: "<hr/><i>Example - Factory pollution. Set tax = MEC to eliminate DWL!</i>"
-            

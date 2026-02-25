@@ -9,15 +9,15 @@ description: |
   <ol>
     <li>In a perfectly competitive product market, <strong>MR = P</strong>, so the Marginal Revenue Product of Labor is <strong>MRP<sub>L</sub> = P × MP<sub>L</sub></strong>.</li>
     <li>Due to <strong>diminishing marginal returns</strong>, MP<sub>L</sub> eventually falls as more labor is hired — causing the MRP<sub>L</sub> curve to slope downward.</li>
-    <li>A shift in product demand changes the output price (P), which <strong>shifts the entire MRP<sub>L</sub> curve</strong> — this is why labor demand is called a <em>derived demand</em>.</li>
+    <li>A shift in product demand changes the output price (P), which <strong>shifts the entire MRP<sub>L</sub> curve</strong> — this is why labor demand is called a derived demand.</li>
   </ol>
 description_zh: |
-  <p>本模型展示了企业对劳动力的需求如何<strong>源于产品市场</strong>。三张图表相互联动——产品需求或工人生产率的变化，都会影响企业愿意雇用的劳动力数量。</p>
+  <p>本模型展示了企业对劳动力的需求<strong>源于产品市场</strong>。三张图表相互联动——产品需求或工人生产率的变化，都会影响企业愿意雇用的劳动力数量。</p>
   <strong>重点观察以下关系：</strong>
   <ol>
     <li>在完全竞争的产品市场中，<strong>MR = P</strong>，因此劳动力的边际收益产品为 <strong>MRP<sub>L</sub> = P × MP<sub>L</sub></strong>。</li>
     <li>由于<strong>边际收益递减规律</strong>，随着雇用劳动力增加，MP<sub>L</sub> 最终下降，导致 MRP<sub>L</sub> 曲线向右下方倾斜。</li>
-    <li>产品需求的变动会改变产品价格（P），进而<strong>整体移动 MRP<sub>L</sub> 曲线</strong>——这正是劳动力需求被称为<em>派生需求</em>的原因。</li>
+    <li>产品需求的变动会改变产品价格（P），进而<strong>整体移动 MRP<sub>L</sub> 曲线</strong>——这正是劳动力需求被称为派生需求的原因。</li>
   </ol>
 schema: EconSchema
 
@@ -27,10 +27,10 @@ params:
     max: 8
     round: 1
   - name: ProductivityFactor
-    value: 0.5
-    min: 0.25
-    max: 1
-    round: 0.25
+    value: 2
+    min: 1
+    max: 3
+    round: 1
   - {name: demandShift, value: 0, min: -5, max: 5, round: 1}
   - {name: supplyShift, value: 0, min: -5, max: 5, round: 0.1}
 
@@ -40,7 +40,7 @@ calcs:
   Pdemand: (20 + 2 * (params.demandShift))
 
   # Marginal Product: MP = -3L^2 + 24L
-  mp: (params.ProductivityFactor) * (params.L) * (9 - params.L)^2
+  mp: ((params.ProductivityFactor)/4) * (params.L) * (9 - params.L)^2
 
   # Marginal Revenue Product: MRP = P × MP
   mrp: (calcs.Pdemand) * (calcs.mp)
@@ -49,11 +49,11 @@ layout:
   ThreeHorizontalGraphs:
     leftGraph:
       xAxis:
-        title: Output (Q)
+        title: Output
         max: 8 
         ticks: 0
       yAxis:
-        title: Price (P)
+        title: Price
         max: 40
         min: 0
         ticks: 5 
@@ -87,24 +87,24 @@ layout:
       title: PC Product Market
       sliders:
         - param: demandShift
-          label: \text{Demand Shift}
+          label: \text{Demand}
       divs:
-      - html: '`A change in product demand affects the product price <b>(Price = $ ${calcs.Pdemand.toFixed(1)})</b>, which in turn affects the marginal revenue product of labor.`'
+      - html: '`A change in product demand affects the product price <b>(Price = $ ${calcs.Pdemand.toFixed(1)})</b>, which in turn affects the MRP<sub>L</sub>.`'
 
     middleGraph:
       xAxis:
-        title: Labor (L)
+        title: Labor
         max: 9
         ticks: 9
       yAxis:
-        title: "Output (Q)"
+        title: "Output"
         max: 90
         min: 0
         ticks: 5
       objects:
         # Marginal Product curve: MP = -3L^2 + 24L
         - Curve:
-            fn: (params.ProductivityFactor) * (x) * (9 - (x))^2
+            fn: ((params.ProductivityFactor)/4) * (x) * (9 - (x))^2
             color: green
             strokeWidth: 2
             max: 8
@@ -125,7 +125,7 @@ layout:
         
         # Maximum MP point (at L=4, MP=48)
         - Point:
-            coordinates: [3, (params.ProductivityFactor) * (3) * (9 - 3)^2]
+            coordinates: [3, ((params.ProductivityFactor)/4) * (3) * (9 - 3)^2]
             color: green
             r: 4
             label:
@@ -136,17 +136,17 @@ layout:
       title: Marginal Product of Labor
       sliders:
         - param: ProductivityFactor
-          label: \text{Productivity Factor}
+          label: \text{Productivity}
       divs:
-      - html: A change in productivity affects the marginal product of labor, which in turn affects the marginal revenue product of labor.  
+      - html: A change in productivity affects the MP<sub>L</sub> curve, which in turn affects the marginal revenue product of labor.  
 
     rightGraph:
       xAxis:
-        title: Labor (L)
+        title: Labor
         max: 9
         ticks: 9
       yAxis:
-        title: Marginal Revenue Product of Labor (MRPL)
+        title: MRPL
         max: 1500 
         min: 0
         ticks: 6
@@ -154,7 +154,7 @@ layout:
       objects:
         # Marginal Revenue Product of Labor curve
         - Curve:
-            fn: (params.ProductivityFactor) * (calcs.Pdemand) * (x) * (9 - (x))^2
+            fn: ((params.ProductivityFactor)/4) * (calcs.Pdemand) * (x) * (9 - (x))^2
             strokeWidth: 3
             max: 8
             color: blue
@@ -175,7 +175,7 @@ layout:
         
         # Show maximum MRP point (at L=4)
         - Point:
-            coordinates: [3, (params.ProductivityFactor) * (calcs.Pdemand) * (3) * (9 - 3)^2]
+            coordinates: [3, ((params.ProductivityFactor)/4) * (calcs.Pdemand) * (3) * (9 - 3)^2]
             r: 4
             label:
               text: "Max MRP"
@@ -188,5 +188,4 @@ layout:
         - param: L
           label: \text{Labor}
       divs:
-      - html: '`The <b>${params.L}th</b> labor produces a value of <b>$ ${calcs.mrp.toFixed(1)}</b> in marginal revenue product.`'      
-      - html: The marginal revenue product of labor is the value of the additional output produced by an additional unit of labor, which is equal to the price of the output <b> (or marginal revenue) </b> times the marginal product of labor.
+      - html: '`The <b># ${params.L}</b> labor produces a value of <b>$ ${calcs.mrp.toFixed(1)}</b> for an employer.`'      

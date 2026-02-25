@@ -263,9 +263,9 @@ layout:
         - title: Positive Production Externality
           sliders:
             - param: MEB
-              label: \text{Marginal External Benefit}
+              label: \text{MEB}
             - param: subsidy
-              label: \text{Pigouvian Subsidy}
+              label: \text{Subsidy}
           checkboxes:
             - param: showSupplyCurve
               label: \text{Show Supply Curve}

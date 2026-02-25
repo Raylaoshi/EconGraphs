@@ -33,11 +33,11 @@ layout:
   OneGraphPlusSidebar:
     graph:
       xAxis:
-        title: Labor (L)
+        title: Labor
         max: 10
         ticks: 10
       yAxis:
-        title: Wage (W)
+        title: Wage
         max: 450
         min: 0
         ticks: 7
@@ -208,7 +208,7 @@ layout:
         - title: Minimum Wage in Monopsony
           sliders:
             - param: minimumWage
-              label: Minimum \ Wage
+              label: W_{min}
           checkboxes:
             - param: showPC
               label: "\\text{Show Perfect Competition}"

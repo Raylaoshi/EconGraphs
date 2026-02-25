@@ -10,9 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Noto+Sans+SC:wght@300;400;500;700&family=Outfit:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
     
-    <!-- KGJS Engine -->
-    <link href="https://raylaoshi.github.io/AP.Econ.Graphs/lib/kg.0.4.0.css" rel="stylesheet" type="text/css">
-    <script src="https://raylaoshi.github.io/AP.Econ.Graphs/lib/kg.0.4.0.js"></script>
+    <!-- KGJS Engine loaded dynamically after YAML is injected -->
     
     <style>
         /* ── THEME PALETTE ── */
@@ -398,9 +396,25 @@ async function init() {
     const kgEl = document.getElementById('kg-container');
     kgEl.textContent = stripFrontMatter(yamlText);
 
-    // Hide loader, reveal graph after KG renders
+    // Hide loader
     document.getElementById('state-msg').style.display = 'none';
-    setTimeout(() => { kgEl.classList.add('ready'); }, 450);
+
+    // Load KG CSS then JS dynamically — guarantees KG scans DOM after YAML is present
+    const kgCSS = document.createElement('link');
+    kgCSS.rel = 'stylesheet';
+    kgCSS.href = 'https://raylaoshi.github.io/AP.Econ.Graphs/lib/kg.0.4.0.css';
+    document.head.appendChild(kgCSS);
+
+    await new Promise((resolve, reject) => {
+      const kgJS = document.createElement('script');
+      kgJS.src = 'https://raylaoshi.github.io/AP.Econ.Graphs/lib/kg.0.4.0.js';
+      kgJS.onload = resolve;
+      kgJS.onerror = reject;
+      document.head.appendChild(kgJS);
+    });
+
+    // KG has now initialised — reveal graph
+    setTimeout(() => { kgEl.classList.add('ready'); }, 200);
 
     // Prevent full SVG drag
     kgEl.addEventListener('mousedown', e => {

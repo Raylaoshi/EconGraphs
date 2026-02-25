@@ -63,8 +63,8 @@
     .back-btn {
       display: inline-flex; align-items: center; gap: .4rem;
       background: var(--faint); border: 1px solid var(--line);
-      color: var(--ink); text-decoration: none; font-family: 'Syne', 'SF Pro Display', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-      font-weight: 700; font-size: .85rem; padding: .5rem 1.1rem;
+      color: var(--ink); text-decoration: none; 
+      font-weight: 600; font-size: .85rem; padding: .5rem 1.1rem;
       border-radius: 6px; transition: all .18s; cursor: pointer;
     }
     .back-btn:hover { background: var(--ink); color: #fff; border-color: var(--ink); }
@@ -74,8 +74,8 @@
       margin-bottom: 1rem; font-weight: 600;
     }
     .page-header h1 {
-      font-family: 'Syne', 'SF Pro Display', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-weight: 800;
-      font-size: clamp(2.5rem,8vw,5rem); letter-spacing: -.04em; line-height: .95;
+      font-family: 'Outfit', 'SF Pro Display', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-weight: 800;
+      font-size: clamp(2.5rem,8vw,5rem); line-height: .95;
       color: var(--ink);
     }
     .page-header h1 .accent { color: var(--red); }
@@ -195,12 +195,12 @@
 <div class="page-header-wrap">
   <div class="page-header">
     <div class="breadcrumb">
-      <a class="back-btn" href="../index.html" data-i18n="backHome">← Home</a>
+      <a class="back-btn" href="../index.html" data-i18n="backHome">↖ Home</a>
       <span style="color:var(--line);font-size:.9rem">/</span>
       <span style="color:var(--mid);font-size:.85rem;font-weight:400" data-i18n="breadcrumbCurrent">AP Micro Graphs</span>
     </div>
     <div class="page-eyebrow" data-i18n="eyebrow">AP Microeconomics · Interactive Models</div>
-    <h1><span data-i18n="h1a">AP Micro</span> <span class="accent" data-i18n="h1b">Graphs</span></h1>
+    <h1><span data-i18n="h1a">AP Micro Graphs</span></h1>
     <p class="page-desc" data-i18n="pageDesc">Interactive models organized by unit and chapter. Click any graph to open it.</p>
   </div>
 </div>
@@ -223,11 +223,10 @@
 // ── Translations ──
 const T = {
   en: {
-    backHome:         '← Home',
+    backHome:         '↖ Home',
     breadcrumbCurrent:'AP Micro Graphs',
     eyebrow:          'AP Microeconomics · Interactive Models',
-    h1a:              'AP Micro',
-    h1b:              'Graphs',
+    h1a:              'AP Micro Graphs',
     pageDesc:         'Interactive models organized by unit and chapter. Click any graph to open it.',
     ghLink:           'View folder on GitHub ↗',
     loading:          'Loading…',
@@ -236,12 +235,11 @@ const T = {
     errorMsg:         '⚠️ Could not load content.json — make sure it\'s uploaded to the same folder as this index.html.',
   },
   zh: {
-    backHome:         '← 返回首页',
-    breadcrumbCurrent:'AP微观经济图表',
-    eyebrow:          'AP微观经济学 · 互动图表模型',
-    h1a:              'AP微观',
-    h1b:              '图表',
-    pageDesc:         '按单元与章节整理的互动图表模型，点击任意图表即可打开。',
+    backHome:         '↖ 首页',
+    breadcrumbCurrent:'AP微观经济图像',
+    eyebrow:          'AP微观经济学 · 互动图像模型',
+    h1a:              'AP微观经济图像',
+    pageDesc:         '按单元与章节整理的互动图像模型，点击任意图像即可打开。',
     ghLink:           '在 GitHub 上查看 ↗',
     loading:          '加载中…',
     openFolder:       '打开',
@@ -337,7 +335,7 @@ function buildContent(data, lang) {
         const { label, title } = parseGraphId(graphId);
         const li = document.createElement('li');
         li.innerHTML = `
-          <a href="viewer.html?graph=${encodeURIComponent(graphId)}" target="_blank">
+          <a href="viewer.html?graph=${encodeURIComponent(graphId)}" target="_self">
             <span class="graph-label">${label}</span>
             <span class="graph-title">${title}</span>
             <span class="graph-arrow">→</span>

@@ -151,7 +151,7 @@
         }
         .page-header h1 {
             font-family: 'Outfit', sans-serif; font-weight: 700;
-            font-size: clamp(2.2rem,6vw,3.8rem); letter-spacing: -.02em;
+            font-size: clamp(2.2rem,6vw,3.8rem); 
             line-height: 1.1; color: var(--ink); min-height: 1.1em;
         }
 
@@ -189,6 +189,13 @@
             -webkit-user-select: none;
         }
         svg text { pointer-events: none; }
+        /* force theme*/
+        .kg-container div, 
+        .kg-container span, 
+        .kg-container p,
+        .kg-container text {
+            font-family: 'Outfit', sans-serif !important;
+        }
 
         /* ── FOOTER ── */
         .footer-wrap { border-top: 1px solid var(--line); background: #fff; }
@@ -222,7 +229,7 @@
 <div class="page-header-wrap">
     <div class="page-header">
         <div class="breadcrumb">
-            <a class="back-btn" href="javascript:history.back()" id="back-btn">⥃ Back</a>
+            <a class="back-btn" href="javascript:history.back()" id="back-btn">↖ Back</a>
             <span class="sep">/</span>
             <a href="index.html" class="folder-link" id="breadcrumb-folder"></a>
             <span class="sep">/</span>
@@ -288,18 +295,18 @@
 // ── i18n & rendering — runs on DOMContentLoaded (after KG has already init'd) ──
 
 const FOLDER_ZH = {
-    'AP Micro Graphs':      'AP微观经济图表',
-    'AP Macro Graphs':      'AP宏观经济图表',
-    'Previous Experiments': '图表试验',
+    'AP Micro Graphs':      'AP微观经济图像',
+    'AP Macro Graphs':      'AP宏观经济图像',
+    'Previous Experiments': '图像试验',
 };
 
 const UI = {
-    en: { back: '⥃ Back',  footer: 'Built with KineticGraphs by Chris Makler',
+    en: { back: '↖ Back',  footer: 'Built with KineticGraphs by Chris Makler',
           errorNotFound: '⚠️ Graph not found. Make sure the .yaml file exists in graphs/',
           errorNoId:     '⚠️ No graph specified. Add ?graph=3.2.G1 to the URL.' },
-    zh: { back: '⥃ 返回',  footer: '基于Chris Makler的KineticGraphs构建',
-          errorNotFound: '⚠️ 找不到图表，请确认 .yaml 文件存在于 graphs/ 文件夹中。',
-          errorNoId:     '⚠️ 未指定图表，请在 URL 中添加 ?graph=3.2.G1。' },
+    zh: { back: '↖ 返回',  footer: '基于Chris Makler的KineticGraphs构建',
+          errorNotFound: '⚠️ 找不到图像，请确认 .yaml 文件存在于 graphs/ 文件夹中。',
+          errorNoId:     '⚠️ 未指定图像，请在 URL 中添加 ?graph=3.2.G1。' },
 };
 
 let currentLang = 'en';

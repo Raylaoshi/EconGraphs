@@ -297,4 +297,3 @@ layout:
             - html: <span style="color:green">Green area</span> - Optimal external benefit at Q<sub>So</sub>
             - html: <span style="color:red">Red triangle</span> - Deadweight loss from underconsumption
             - html: <hr/><i>Example - Vaccination benefits the whole community. Set subsidy = MEB to eliminate DWL!</i>
-    

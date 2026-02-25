@@ -4,16 +4,72 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AP.Econ.Graphs</title>
-    
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Noto+Sans+SC:wght@300;400;500;700&family=Outfit:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
-    
-    <!-- KGJS Engine loaded dynamically after YAML is injected -->
-    
+
+    <!-- KGJS — loaded statically so it fires on DOMContentLoaded and finds content -->
+    <link href="https://raylaoshi.github.io/AP.Econ.Graphs/lib/kg.0.4.0.css" rel="stylesheet" type="text/css">
+    <script src="https://raylaoshi.github.io/AP.Econ.Graphs/lib/kg.0.4.0.js"></script>
+
+    <!-- Helper functions defined early so inline sync script below can use them -->
+    <script>
+        // Strip front-matter lines, return from 'schema:' onward
+        function stripFrontMatter(yaml) {
+            const idx = yaml.indexOf('\nschema:');
+            if (idx >= 0) return yaml.slice(idx + 1);
+            // fallback: starts with schema:
+            if (yaml.startsWith('schema:')) return yaml;
+            return yaml;
+        }
+
+        // Parse front-matter fields before 'schema:' line
+        // Supports single-line values and block scalars (|)
+        function parseFrontMatter(yaml) {
+            const result = {
+                title: '', title_zh: '',
+                description: '', description_zh: '',
+                label: '', eyebrow: '', eyebrow_zh: ''
+            };
+            const FIELDS = Object.keys(result);
+            const lines = yaml.split('\n');
+            let i = 0, blockKey = null, blockLines = [];
+
+            function flushBlock() {
+                if (blockKey) {
+                    result[blockKey] = blockLines.join('\n').trim();
+                    blockKey = null; blockLines = [];
+                }
+            }
+
+            while (i < lines.length) {
+                const line = lines[i];
+                if (/^schema:/.test(line)) { flushBlock(); break; }
+                if (blockKey !== null) {
+                    if (line.startsWith('  ') || line.trim() === '') {
+                        blockLines.push(line.trim()); i++;
+                    } else { flushBlock(); continue; }
+                } else {
+                    const m = line.match(/^([a-zA-Z_]+):\s*(.*)/);
+                    if (m && FIELDS.includes(m[1])) {
+                        const [, key, val] = m;
+                        if (val.trim() === '|' || val.trim() === '>') {
+                            blockKey = key; blockLines = [];
+                        } else {
+                            result[key] = val.trim().replace(/^["']|["']$/g, '');
+                        }
+                    }
+                    i++;
+                }
+            }
+            flushBlock();
+            return result;
+        }
+    </script>
+
     <style>
-        /* ── THEME PALETTE ── */
         :root {
             --bg: #fcfbf9;
             --ink: #050e3c;
@@ -22,36 +78,34 @@
             --line: #e6e4e0;
             --red: #DC0000;
             --red-dim: #fce8e8;
-            --blue: #0057ff;
         }
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         html { scroll-behavior: smooth; }
-        
+
         body {
-            background: #ffffff; 
+            background: #ffffff;
             color: var(--ink);
             font-family: 'Outfit', 'Noto Sans SC', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
-            font-weight: 300; 
+            font-weight: 300;
             line-height: 1.7;
             -webkit-font-smoothing: antialiased;
-            opacity: 0; 
+            opacity: 0;
             transition: opacity 0.4s ease-in-out;
         }
 
         /* ── TOPBAR ── */
         .topbar {
-            position: relative;
-            z-index: 100;
+            position: relative; z-index: 100;
             display: flex; align-items: center; justify-content: space-between;
             padding: 0 clamp(1rem,4vw,2rem); height: 64px;
             border-bottom: 1px solid var(--line);
             background: rgba(252,251,249,.95); backdrop-filter: blur(12px);
         }
         .logo {
-            font-family: 'Syne', 'SF Pro Display', 'PingFang SC', sans-serif; font-weight: 800;
-            font-size: clamp(.85rem,2vw,1.1rem); letter-spacing: -.02em;
-            color: var(--ink); text-decoration: none;
+            font-family: 'Syne', 'SF Pro Display', 'PingFang SC', sans-serif;
+            font-weight: 800; font-size: clamp(.85rem,2vw,1.1rem);
+            letter-spacing: -.02em; color: var(--ink); text-decoration: none;
         }
         .logo span { color: var(--red); }
         .topbar-right { display: flex; align-items: center; gap: 1rem; }
@@ -64,23 +118,21 @@
         .lang-btn:hover { border-color: var(--mid); }
         .lang-btn.active { background: var(--ink); color: #fff; border-color: var(--ink); }
 
-        /* ── PAGE HEADER & BREADCRUMBS ── */
+        /* ── PAGE HEADER ── */
         .page-header-wrap { border-bottom: 1px solid var(--line); background: #fff; }
         .page-header {
             max-width: 1100px; margin: 0 auto;
             padding: clamp(2rem,5vw,4rem) clamp(1rem,4vw,2rem) clamp(1rem,3vw,2rem);
         }
         .breadcrumb {
-            font-size: .75rem; color: var(--mid);
             display: flex; align-items: center; gap: .4rem; flex-wrap: wrap;
             margin-bottom: 1.2rem;
-            min-height: 1.2rem;
         }
         .back-btn {
             display: inline-flex; align-items: center; gap: .4rem;
             background: var(--faint); border: 1px solid var(--line);
-            color: var(--ink); text-decoration: none; 
-            font-family: 'Outfit', sans-serif; 
+            color: var(--ink); text-decoration: none;
+            font-family: 'Outfit', sans-serif;
             font-weight: 600; font-size: .8rem; padding: .5rem 1.1rem;
             border-radius: 6px; transition: all .18s; cursor: pointer;
         }
@@ -95,71 +147,48 @@
         .page-eyebrow {
             font-size: clamp(.65rem,1.5vw,.75rem); letter-spacing: .15em;
             text-transform: uppercase; color: var(--mid);
-            margin-bottom: 1rem; font-weight: 600;
-            min-height: 1em;
+            margin-bottom: 1rem; font-weight: 600; min-height: 1em;
         }
         .page-header h1 {
-            font-family: 'Outfit', sans-serif; 
-            font-weight: 700;
-            font-size: clamp(2.2rem,6vw,3.8rem); 
-            letter-spacing: -.02em; 
-            line-height: 1.1; 
-            color: var(--ink); 
-            min-height: 1.1em;
+            font-family: 'Outfit', sans-serif; font-weight: 700;
+            font-size: clamp(2.2rem,6vw,3.8rem); letter-spacing: -.02em;
+            line-height: 1.1; color: var(--ink); min-height: 1.1em;
         }
 
         /* ── DESCRIPTION ── */
         .page-desc {
-            margin-top: 1.2rem;
-            font-size: clamp(.95rem,2vw,1.05rem);
-            color: var(--mid); 
-            line-height: 1.7;
-            max-width: 800px;
+            margin-top: 1.2rem; font-size: clamp(.95rem,2vw,1.05rem);
+            color: var(--mid); line-height: 1.7; max-width: 800px;
         }
         .page-desc p { margin-bottom: 0.8rem; }
         .page-desc strong { color: var(--ink); font-weight: 600; }
-        .page-desc ol, .page-desc ul { margin-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0; }
+        .page-desc ol, .page-desc ul { margin-left: 1.5rem; margin-top: 0.5rem; }
         .page-desc li { margin-bottom: 0.3rem; }
         .page-desc li strong { color: var(--red); font-weight: 500; }
         :lang(zh) .page-desc { line-height: 1.8; letter-spacing: 0.02em; }
 
-        /* ── LOADING / ERROR STATES ── */
-        .state-msg {
-            padding: 4rem 0; text-align: center;
-            color: var(--mid); font-size: .9rem;
-        }
-        .spinner {
-            width: 18px; height: 18px;
-            border: 2px solid var(--line); border-top-color: var(--red);
-            border-radius: 50%; animation: spin .7s linear infinite;
-            display: inline-block; margin-right: .5rem; vertical-align: middle;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .error-msg { color: var(--red); }
-
-        /* ── MAIN CONTENT ── */
+        /* ── MAIN ── */
         main {
             max-width: 1100px; margin: 0 auto;
             padding: 0 clamp(1rem,4vw,2rem) clamp(4rem,8vw,6rem);
         }
 
-        /* ── GRAPH IFRAME ── */
-        .graph-frame-wrap {
-            margin: 2rem 0 0 0;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            background: #fff;
+        /* ── ERROR STATE ── */
+        .error-msg {
+            padding: 4rem 0; text-align: center;
+            color: var(--red); font-size: .9rem; display: none;
+        }
+
+        /* ── GRAPH CONTAINER ── */
+        .kg-container {
+            max-width: 1100px;
+            margin: 3rem 0 0 0;
+            background: #ffffff;
             border-radius: 12px;
-            overflow: hidden;
+            user-select: none;
+            -webkit-user-select: none;
         }
-        .graph-frame-wrap.ready { opacity: 1; }
-        .graph-frame {
-            width: 100%;
-            border: none;
-            display: block;
-            /* Height is set dynamically via JS to match iframe content */
-            min-height: 500px;
-        }
+        svg text { pointer-events: none; }
 
         /* ── FOOTER ── */
         .footer-wrap { border-top: 1px solid var(--line); background: #fff; }
@@ -173,8 +202,8 @@
         footer a:hover { color: var(--ink); }
 
         @media (max-width: 768px) {
-            .page-header { padding-top: 2rem; padding-bottom: 2rem; }
-            .kg-container { margin-top: 2rem; padding: 1rem; }
+            .page-header { padding-top: 2rem; }
+            .kg-container { margin-top: 2rem; }
         }
     </style>
 </head>
@@ -193,7 +222,7 @@
 <div class="page-header-wrap">
     <div class="page-header">
         <div class="breadcrumb">
-            <a class="back-btn" href="javascript:history.back()" data-i18n="backBtn">⥃ Back</a>
+            <a class="back-btn" href="javascript:history.back()" id="back-btn">⥃ Back</a>
             <span class="sep">/</span>
             <a href="index.html" class="folder-link" id="breadcrumb-folder"></a>
             <span class="sep">/</span>
@@ -206,272 +235,160 @@
 </div>
 
 <main>
-    <div class="state-msg" id="state-msg">
-        <span class="spinner"></span> <span id="loading-text">Loading graph…</span>
-    </div>
-    <div class="graph-frame-wrap" id="graph-frame-wrap">
-        <iframe class="graph-frame" id="graph-frame" scrolling="no"></iframe>
-    </div>
+    <div class="error-msg" id="error-msg"></div>
+
+    <!--
+        ┌─────────────────────────────────────────────────────────┐
+        │  SYNCHRONOUS YAML INJECTION                             │
+        │                                                         │
+        │  The <script> immediately below runs synchronously      │
+        │  during page parsing — BEFORE DOMContentLoaded fires.   │
+        │  It fetches the YAML via synchronous XHR and injects    │
+        │  it directly into .kg-container.                        │
+        │                                                         │
+        │  KG is loaded statically in <head> and fires its init   │
+        │  on DOMContentLoaded — by which time the content is     │
+        │  guaranteed to already be present. Race condition = 0.  │
+        └─────────────────────────────────────────────────────────┘
+    -->
+    <div class="kg-container" id="kg-container"></div>
+    <script>
+        (function () {
+            const graphId = new URLSearchParams(location.search).get('graph');
+            if (!graphId) return;
+
+            try {
+                const xhr = new XMLHttpRequest();
+                xhr.open('GET', 'graphs/' + encodeURIComponent(graphId) + '.yaml', false); // false = synchronous
+                xhr.send(null);
+
+                if (xhr.status === 200) {
+                    // Inject stripped YAML — content is in DOM before DOMContentLoaded
+                    document.getElementById('kg-container').textContent = stripFrontMatter(xhr.responseText);
+                    // Store full text for metadata rendering in DOMContentLoaded below
+                    window._kgYaml = xhr.responseText;
+                } else {
+                    window._kgError = 'HTTP ' + xhr.status;
+                }
+            } catch (e) {
+                window._kgError = e.message;
+            }
+        })();
+    </script>
 </main>
 
 <div class="footer-wrap">
-  <footer>
-    <span>AP.Econ.Graphs · <a href="https://github.com/Raylaoshi/AP.Econ.Graphs" target="_blank">github.com/Raylaoshi</a></span>
-    <span data-i18n="footerCredit">Built with KineticGraphs by Chris Makler</span>
-  </footer>
+    <footer>
+        <span>AP.Econ.Graphs · <a href="https://github.com/Raylaoshi/AP.Econ.Graphs" target="_blank">github.com/Raylaoshi</a></span>
+        <span id="footer-credit">Built with KineticGraphs by Chris Makler</span>
+    </footer>
 </div>
 
 <script>
-// ── i18n strings ──
-const T = {
-  en: {
-    backBtn:       '⥃ Back',
-    footerCredit:  'Built with KineticGraphs by Chris Makler',
-    loading:       'Loading graph…',
-    errorNotFound: '⚠️ Graph not found. Make sure the .yaml file exists in the graphs/ folder.',
-    errorNoId:     '⚠️ No graph specified. Add ?graph=3.2.G1 to the URL.',
-  },
-  zh: {
-    backBtn:       '⥃ 返回',
-    footerCredit:  '基于Chris Makler的KineticGraphs构建',
-    loading:       '加载图表中…',
-    errorNotFound: '⚠️ 找不到图表，请确认 .yaml 文件存在于 graphs/ 文件夹中。',
-    errorNoId:     '⚠️ 未指定图表，请在 URL 中添加 ?graph=3.2.G1。',
-  }
+// ── i18n & rendering — runs on DOMContentLoaded (after KG has already init'd) ──
+
+const FOLDER_ZH = {
+    'AP Micro Graphs':      'AP微观经济图表',
+    'AP Macro Graphs':      'AP宏观经济图表',
+    'Previous Experiments': '图表试验',
 };
 
-// Folder name translations
-const FOLDER_ZH = {
-  'AP Micro Graphs':      'AP微观经济图表',
-  'AP Macro Graphs':      'AP宏观经济图表',
-  'Previous Experiments': '图表试验',
+const UI = {
+    en: { back: '⥃ Back',  footer: 'Built with KineticGraphs by Chris Makler',
+          errorNotFound: '⚠️ Graph not found. Make sure the .yaml file exists in graphs/',
+          errorNoId:     '⚠️ No graph specified. Add ?graph=3.2.G1 to the URL.' },
+    zh: { back: '⥃ 返回',  footer: '基于Chris Makler的KineticGraphs构建',
+          errorNotFound: '⚠️ 找不到图表，请确认 .yaml 文件存在于 graphs/ 文件夹中。',
+          errorNoId:     '⚠️ 未指定图表，请在 URL 中添加 ?graph=3.2.G1。' },
 };
 
 let currentLang = 'en';
-let meta = {};
 
-function parseFrontMatter(yamlText) {
-  const result = {
-    title: '', title_zh: '',
-    description: '', description_zh: '',
-    label: '', eyebrow: '', eyebrow_zh: '',
-  };
+function render(lang, meta) {
+    meta = meta || {};
 
-  const FIELDS = Object.keys(result);
-  const lines = yamlText.split('\n');
-  let i = 0;
-  let blockKey = null;
-  let blockLines = [];
+    // Static UI
+    document.getElementById('back-btn').textContent      = UI[lang].back;
+    document.getElementById('footer-credit').textContent = UI[lang].footer;
 
-  function flushBlock() {
-    if (blockKey) {
-      result[blockKey] = blockLines.join('\n').trimEnd();
-      blockKey = null;
-      blockLines = [];
-    }
-  }
+    // Breadcrumb folder
+    const parts = window.location.pathname.split('/');
+    const folderName = decodeURIComponent(parts[parts.length - 2] || '');
+    document.getElementById('breadcrumb-folder').textContent =
+        lang === 'zh' ? (FOLDER_ZH[folderName] || folderName) : folderName;
 
-  while (i < lines.length) {
-    const line = lines[i];
+    // Code label
+    document.getElementById('breadcrumb-code').textContent = meta.label || '';
 
-    if (/^schema:/.test(line)) { flushBlock(); break; }
+    // Eyebrow
+    document.getElementById('page-eyebrow').textContent =
+        (lang === 'zh' && meta.eyebrow_zh) ? meta.eyebrow_zh : (meta.eyebrow || '');
 
-    if (blockKey !== null) {
-      if (line.match(/^\s+/) || line.trim() === '') {
-        blockLines.push(line.trim());
-      } else {
-        flushBlock();
-        continue; // re-process this line without incrementing
-      }
-    } else {
-      const m = line.match(/^([a-zA-Z_]+):\s*(.*)/);
-      if (m && FIELDS.includes(m[1])) {
-        const key = m[1];
-        const val = m[2].trim();
-        if (val === '|' || val === '>') {
-          blockKey = key;
-          blockLines = [];
-        } else {
-          result[key] = val.replace(/^["']|["']$/g, '');
-        }
-      }
-    }
-    i++;
-  }
+    // Title
+    document.getElementById('page-title').textContent =
+        (lang === 'zh' && meta.title_zh) ? meta.title_zh : (meta.title || '');
 
-  flushBlock();
-  return result;
-}
+    // Description (innerHTML — supports HTML tags)
+    document.getElementById('page-desc').innerHTML =
+        (lang === 'zh' && meta.description_zh) ? meta.description_zh : (meta.description || '');
 
-// Strip front-matter lines, keep everything from 'schema:' onward
-function stripFrontMatter(yamlText) {
-  const lines = yamlText.split('\n');
-  let started = false;
-  return lines.filter(line => {
-    if (line.startsWith('schema:')) started = true;
-    return started;
-  }).join('\n');
-}
-
-function getFolderName() {
-  const parts = window.location.pathname.split('/');
-  return decodeURIComponent(parts[parts.length - 2] || '') || 'AP Micro Graphs';
-}
-
-function render(lang) {
-  const t = T[lang];
-
-  // i18n static strings
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.getAttribute('data-i18n');
-    if (t[key] !== undefined) el.textContent = t[key];
-  });
-
-  // Breadcrumb folder
-  const folderName = getFolderName();
-  document.getElementById('breadcrumb-folder').textContent =
-    lang === 'zh' ? (FOLDER_ZH[folderName] || folderName) : folderName;
-
-  // Code label
-  document.getElementById('breadcrumb-code').textContent = meta.label || '';
-
-  // Eyebrow
-  document.getElementById('page-eyebrow').textContent =
-    (lang === 'zh' && meta.eyebrow_zh) ? meta.eyebrow_zh : (meta.eyebrow || '');
-
-  // Title
-  document.getElementById('page-title').textContent =
-    (lang === 'zh' && meta.title_zh) ? meta.title_zh : (meta.title || '');
-
-  // Description (innerHTML to support <p>, <ol>, <strong> etc.)
-  document.getElementById('page-desc').innerHTML =
-    (lang === 'zh' && meta.description_zh) ? meta.description_zh : (meta.description || '');
-
-  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
-  document.getElementById('btn-zh').classList.toggle('active', lang === 'zh');
-  document.documentElement.lang = lang === 'zh' ? 'zh' : 'en';
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    document.getElementById('btn-zh').classList.toggle('active', lang === 'zh');
+    document.documentElement.lang = lang === 'zh' ? 'zh' : 'en';
 }
 
 function setLang(lang) {
-  currentLang = lang;
-  render(lang);
-  try { localStorage.setItem('econ-lang', lang); } catch(e) {}
+    currentLang = lang;
+    // Re-render with stored meta
+    render(lang, window._kgMeta || {});
+    try { localStorage.setItem('econ-lang', lang); } catch(e) {}
 }
 
 function detectLang() {
-  try {
-    const saved = localStorage.getItem('econ-lang');
-    if (saved === 'en' || saved === 'zh') return saved;
-  } catch(e) {}
-  return (navigator.language || '').toLowerCase().startsWith('zh') ? 'zh' : 'en';
+    try {
+        const saved = localStorage.getItem('econ-lang');
+        if (saved === 'en' || saved === 'zh') return saved;
+    } catch(e) {}
+    return (navigator.language || '').toLowerCase().startsWith('zh') ? 'zh' : 'en';
 }
 
-function showError(msg) {
-  const el = document.getElementById('state-msg');
-  el.innerHTML = `<span class="error-msg">${msg}</span>`;
-  el.style.display = 'block';
-}
+document.addEventListener('DOMContentLoaded', function () {
+    currentLang = detectLang();
 
-async function init() {
-  currentLang = detectLang();
+    const graphId = new URLSearchParams(location.search).get('graph');
 
-  const urlParams = new URLSearchParams(window.location.search);
-  const graphId   = urlParams.get('graph');
-
-  if (!graphId) {
-    render(currentLang);
-    document.body.style.opacity = '1';
-    showError(T[currentLang].errorNoId);
-    return;
-  }
-
-  try {
-    const res = await fetch(`graphs/${encodeURIComponent(graphId)}.yaml?v=${Date.now()}`);
-    if (!res.ok) throw new Error('YAML not found');
-    const yamlText = await res.text();
-
-    // Extract metadata from front-matter
-    meta = parseFrontMatter(yamlText);
-    document.title = `${meta.title || graphId} — AP.Econ.Graphs`;
-
-    // Render UI with metadata
-    render(currentLang);
-
-    // Build a complete self-contained HTML page with the YAML already embedded.
-    // KG initialises on DOMContentLoaded inside the iframe — always finds the content.
-    const strippedYaml = stripFrontMatter(yamlText);
-    const iframeHTML = `<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <link href="https://raylaoshi.github.io/AP.Econ.Graphs/lib/kg.0.4.0.css" rel="stylesheet">
-  <script src="https://raylaoshi.github.io/AP.Econ.Graphs/lib/kg.0.4.0.js"><\/script>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #fff; overflow: hidden; }
-    .kg-container {
-      user-select: none;
-      -webkit-user-select: none;
+    // Handle errors from sync XHR above
+    if (!graphId) {
+        document.getElementById('error-msg').textContent = UI[currentLang].errorNoId;
+        document.getElementById('error-msg').style.display = 'block';
+        document.getElementById('kg-container').style.display = 'none';
+        render(currentLang, {});
+    } else if (window._kgError) {
+        document.getElementById('error-msg').textContent = UI[currentLang].errorNotFound;
+        document.getElementById('error-msg').style.display = 'block';
+        document.getElementById('kg-container').style.display = 'none';
+        render(currentLang, {});
+    } else if (window._kgYaml) {
+        // Parse metadata and render UI
+        const meta = parseFrontMatter(window._kgYaml);
+        window._kgMeta = meta;
+        document.title = (meta.title || graphId) + ' — AP.Econ.Graphs';
+        render(currentLang, meta);
     }
-    svg text { pointer-events: none; }
-  </style>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const container = document.querySelector('.kg-container');
-      if (container) {
-        container.addEventListener('mousedown', function(e) {
-          if (e.target.closest('svg')) e.preventDefault();
+
+    // KG drag fix
+    const container = document.getElementById('kg-container');
+    if (container) {
+        container.addEventListener('mousedown', function (e) {
+            if (e.target.closest('svg')) e.preventDefault();
         }, true);
-      }
-      // Tell parent the content height so iframe resizes correctly
-      function reportHeight() {
-        const h = document.body.scrollHeight;
-        window.parent.postMessage({ type: 'kg-height', height: h }, '*');
-      }
-      // Report after KG has rendered (give it a moment)
-      setTimeout(reportHeight, 600);
-      window.addEventListener('resize', reportHeight);
-    });
-  <\/script>
-</head>
-<body>
-<div class="kg-container">
-${strippedYaml}
-</div>
-</body>
-</html>`;
+    }
 
-    // Create a Blob URL and assign to iframe
-    const blob = new Blob([iframeHTML], { type: 'text/html' });
-    const blobURL = URL.createObjectURL(blob);
-
-    const frameWrap = document.getElementById('graph-frame-wrap');
-    const frame     = document.getElementById('graph-frame');
-
-    // Listen for height reports from iframe
-    window.addEventListener('message', function(e) {
-      if (e.data && e.data.type === 'kg-height') {
-        frame.style.height = (e.data.height + 20) + 'px';
-        frameWrap.classList.add('ready');
-        document.getElementById('state-msg').style.display = 'none';
-      }
-    });
-
-    frame.src = blobURL;
-
-  } catch(err) {
-    render(currentLang);
-    showError(T[currentLang].errorNotFound);
-    console.error(err);
-  }
-
-  // Reveal page — font gate with 800ms fallback
-  document.fonts.ready.then(() => { document.body.style.opacity = '1'; });
-  setTimeout(() => { document.body.style.opacity = '1'; }, 800);
-}
-
-document.addEventListener('DOMContentLoaded', init);
+    // Reveal page after fonts load — 800ms fallback for China
+    document.fonts.ready.then(() => { document.body.style.opacity = '1'; });
+    setTimeout(() => { document.body.style.opacity = '1'; }, 800);
+});
 </script>
- 
+
 </body>
 </html>

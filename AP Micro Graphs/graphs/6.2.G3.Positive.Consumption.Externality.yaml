@@ -298,8 +298,3 @@ layout:
             - html: <span style="color:red">Red triangle</span> - Deadweight loss from underconsumption
             - html: <hr/><i>Example - Vaccination benefits the whole community. Set subsidy = MEB to eliminate DWL!</i>
     
-  </div>
-
-            
-</body>
-</html>

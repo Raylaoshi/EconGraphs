@@ -295,6 +295,3 @@ layout:
             - html: <span style="color:green">Green area</span> - Tolerable external cost at Q<sub>So</sub>
             - html: <span style="color:red">Red triangle</span> - Deadweight loss from overconsumption
             - html: <hr/><i>Example - Smoking. Set tax = MEC to eliminate DWL!</i>
-</div>
-</body>
-</html>

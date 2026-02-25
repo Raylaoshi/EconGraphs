@@ -21,7 +21,6 @@ description_zh: |
   </ol>
 
 schema: EconSchema
-
 params:
 - name: L
   value: 1

@@ -1,0 +1,226 @@
+title: Total Product and Total Variable Cost
+title_zh: 总产量与边际产量
+label: 3.3.G1
+eyebrow: Unit 3 — Production, Cost, and Perfect Competition
+eyebrow_zh:
+description: |
+
+  <p>Drag the point along the Labor axis to observe how the Total Variable Cost (TVC) curve is derived from the Total Product (TP) curve.</p>
+  <strong>The shape of TVC is determined by the shape of TP through the following logic chain:</strong>
+  <p><em>TP curve shape → marginal productivity → labor required per unit of output → TVC shape</em></p>
+  <ol>
+      <li>L = 1~4: TP increases at an <strong>increasing</strong> rate → MP is <strong>rising</strong> → each additional unit of output requires <strong>less</strong> labor → TVC increases at a <strong>decreasing</strong> rate.</li>
+      <li>L = 4~8: TP increases at a <strong>decreasing</strong> rate → MP is <strong>falling</strong> → each additional unit of output requires <strong>more</strong> labor → TVC increases at an <strong>increasing</strong> rate.</li>
+  </ol>
+
+description_zh: |
+
+  <p>沿劳动力轴拖动端点，观察总可变成本（TVC）曲线如何从总产量（TP）曲线推导而来。</p>
+  <strong>TVC的形状由TP的形状通过以下逻辑链决定：</strong>
+  <p><em>TP曲线形状 → 边际生产率 → 每单位产量所需劳动力 → TVC形状</em></p>
+  <ol>
+      <li>L = 1~4：TP以<strong>递增</strong>速率增加 → MP<strong>上升</strong> → 每增加一单位产量所需劳动力<strong>减少</strong> → TVC以<strong>递减</strong>速率增加。</li>
+      <li>L = 4~8：TP以<strong>递减</strong>速率增加 → MP<strong>下降</strong> → 每增加一单位产量所需劳动力<strong>增加</strong> → TVC以<strong>递增</strong>速率增加。</li>
+  </ol>
+
+
+schema: EconSchema
+params:
+- name: L
+  value: 1
+  min: 0
+  max: 8
+  round: 0.1 
+- name: W
+  value: 50        
+  min: 20
+  max: 80
+  round: 1
+
+calcs:
+  # curves
+  TP: "(-(params.L)^3 + 12*(params.L)^2)"
+  MP: "(-3*(params.L)^2 + 24*(params.L))"
+  TFC: 100
+  TVC: "params.W * params.L"
+  TC: TFC + TVC
+
+  # key points
+  XInflectionTP: 4
+  ZeroMP: 8
+  XInflectionTVC: 128
+  
+
+  # key regions
+  StageI: "calcs.XInflectionTP/2"
+  StageII: "((calcs.XInflectionTP + 10)/2)"
+
+layout:
+  TwoVerticalGraphsPlusSidebar:
+    topGraph:
+      xAxis:
+        title: Labor 
+        orient: bottom
+        min: 0
+        max: 8
+        ticks: 8     
+            
+      yAxis:
+        title: Output
+        orient: left
+        min: 0
+        max: 300
+        ticks: 5
+      
+      objects:
+
+        - Curve:
+            fn: "(-(x)^3+12*(x)^2)"
+            samplePoints: 100
+            stroke: blue
+            strokeWidth: 2
+            label:
+              text: \text{Total Product}
+              x: 7
+              position: t       
+              
+        - Point:
+            coordinates: [params.L, calcs.TP]
+            color: blue
+            drag:
+            - horizontal: L
+            droplines:
+              vertical: params.L.toFixed(1)
+              horizontal: calcs.TP.toFixed(1)         
+        
+        # ------
+
+        # Vertical line at the inflection point
+        - Segment:
+            a: [calcs.XInflectionTP, 300]
+            b: [calcs.XInflectionTP, 0]
+            strokeWidth: 1
+            lineStyle: dotted
+            color: grey
+
+        # Region Labels - left
+        - Label:
+            coordinates: [calcs.StageI, /] 
+            text: \text{Increasing Marginal Returns}
+            color: black
+            fontSize: 10
+        
+        # Region Labels - right
+        - Label:
+            coordinates: [calcs.StageII, /]
+            text: \text{Diminishing Marginal Returns}
+            color: black
+            fontSize: 10
+
+        # add a point at the steepest point
+        - Point:
+            coordinates: [calcs.XInflectionTP,(-(calcs.XInflectionTP)^3+12*(calcs.XInflectionTP)^2)]
+            color: blue
+            label:
+              text: \text{Steepest}
+              position: tl
+            bgcolor: none
+            fontSize: 10
+            r: 5
+        
+        # add a point at the maximum point
+        - Point:
+            coordinates: [calcs.ZeroMP,(-(calcs.ZeroMP)^3+12*(calcs.ZeroMP)^2)]
+            color: blue
+            label:
+              text: \text{Maximum}
+              position: bl
+            bgcolor: none
+            fontSize: 10
+            r: 5          
+
+    bottomGraph:
+      xAxis:
+        title: Output 
+        orient: bottom
+        min: 0
+        max: 280 
+        ticks: 8     
+            
+      yAxis:
+        title: Cost
+        orient: left
+        min: 0
+        max: 500
+        ticks: 5
+      
+      objects:
+        
+        # Cruve shape
+        - Curve:
+            fn: (-((y)/(params.W))^3 + 12*((y)/(params.W))^2)
+            ind: y
+            max: (8*params.W)
+            samplePoints: 300
+            stroke: green
+            strokeWidth: 2
+            label:
+              text: \text{Total Variable Cost}
+              y: 150
+              position: b
+      
+        # Current point       
+        - Point:
+            coordinates: [calcs.TP,calcs.TVC] 
+            color: green
+            droplines:
+              vertical: calcs.TP.toFixed(1)
+              horizontal: calcs.TVC.toFixed(1)
+              
+        # ------
+
+        # Vertical line at the inflection point
+        - Segment:
+            a: [128, 500]
+            b: [128, 0] 
+            strokeWidth: 1
+            lineStyle: dotted
+            color: grey
+
+        # Region Labels - left
+        - Label:
+            coordinates: [64, 500] 
+            text: \text{Increasing Marginal Returns}
+            color: black
+            fontSize: 10
+        
+        # Region Labels - right
+        - Label:
+            coordinates: [214, 500]
+            text: \text{Diminishing Marginal Returns}
+            color: black
+            fontSize: 10
+
+        # add a point at the flattest point
+        - Point:
+            coordinates: [128, (4*params.W)]
+            color: green
+            label:
+              text: \text{Flattest}
+              position: tl
+            bgcolor: none
+            fontSize: 10
+            r: 5
+
+
+    sidebar:
+          controls:
+          - title: Total Product and Total Variable Cost
+            sliders:
+            - param: L
+              label: Labor
+            - param: W
+              label: Wage
+            divs:
+              - html: '`With the production level of $Output = ${calcs.TP.toFixed(1)}$ $units$, the firm requires $Labor = ${params.L.toFixed(1)}$ $units$ of labor.`'
+              - html: '`At a wage rate of $Wage = ${params.W.toFixed(0)}$ $dollars$, the Total Variable Cost is $TVC = ${calcs.TVC.toFixed(1)}$ $dollars$.`' 

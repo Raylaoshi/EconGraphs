@@ -4,14 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AP Micro Graphs — AP.Econ.Graphs</title>
-  
-  <!-- Fonts (Synchronized with graph page) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Noto+Sans+SC:wght@300;400;500;700&family=Outfit:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
-  
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Outfit:wght@300;400;500&family=Noto+Sans+SC:wght@300;400;500&family=DM+Mono&display=swap" rel="stylesheet" />
   <style>
-    /* ── THEME PALETTE (Synchronized) ── */
     :root {
       --bg: #fcfbf9;
       --ink: #050e3c;
@@ -20,29 +14,20 @@
       --line: #e6e4e0;
       --red: #DC0000;
       --red-dim: #fce8e8;
-      --blue: #0057ff;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-    
     body {
       background: var(--bg); color: var(--ink);
       font-family: 'Outfit', 'Noto Sans SC', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
       font-weight: 300; line-height: 1.7;
       -webkit-font-smoothing: antialiased;
-      opacity: 0; transition: opacity .35s ease-in-out;
+      opacity: 0; transition: opacity .35s ease;
     }
 
-    /* TYPOGRAPHY ADJUSTMENTS FOR CHINESE */
-    :lang(zh) .page-desc {
-      line-height: 1.8;
-      letter-spacing: 0.02em;
-    }
-
-    /* ── TOPBAR ── */
+    /* TOPBAR */
     .topbar {
       position: sticky; top: 0; z-index: 100;
-      z-index: 100;
       display: flex; align-items: center; justify-content: space-between;
       padding: 0 clamp(1rem,4vw,2rem); height: 64px;
       border-bottom: 1px solid var(--line);
@@ -64,45 +49,34 @@
     .lang-btn:hover { border-color: var(--mid); }
     .lang-btn.active { background: var(--ink); color: #fff; border-color: var(--ink); }
 
-    /* ── PAGE HEADER & BREADCRUMBS ── */
-    .page-header-wrap { border-bottom: 1px solid var(--line); background: #fff;}
+    /* PAGE HEADER */
+    .page-header-wrap { border-bottom: 1px solid var(--line); }
     .page-header {
       max-width: 1100px; margin: 0 auto;
-      padding: clamp(2rem,5vw,4rem) clamp(1rem,4vw,2rem) clamp(2rem,4vw,3rem);
+      padding: clamp(3rem,7vw,5rem) clamp(1rem,4vw,2rem) clamp(2rem,4vw,3rem);
     }
     .breadcrumb {
       font-size: .75rem; color: var(--mid);
-      display: flex; align-items: center; gap: .4rem; flex-wrap: wrap;
+      display: flex; align-items: center; gap: .4rem;
       margin-bottom: 1.2rem;
     }
     .back-btn {
       display: inline-flex; align-items: center; gap: .4rem;
       background: var(--faint); border: 1px solid var(--line);
-      color: var(--ink); text-decoration: none; 
-      font-family: 'Outfit', sans-serif; 
-      font-weight: 600; font-size: .85rem; padding: .5rem 1.1rem;
+      color: var(--ink); text-decoration: none; font-family: 'Syne', 'SF Pro Display', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      font-weight: 700; font-size: .85rem; padding: .5rem 1.1rem;
       border-radius: 6px; transition: all .18s; cursor: pointer;
     }
     .back-btn:hover { background: var(--ink); color: #fff; border-color: var(--ink); }
-    
-    .breadcrumb .sep { color: var(--line); font-size: .9rem; margin: 0 .2rem; }
-    .breadcrumb .folder-link {
-      color: var(--mid); text-decoration: none; font-size: .85rem; transition: color .2s;
-    }
-    .breadcrumb .folder-link:hover { color: var(--ink); text-decoration: underline; }
-
     .page-eyebrow {
-      font-size: clamp(.65rem,1.5vw,.75rem); letter-spacing: .15em;
+      font-size: clamp(.65rem,1.5vw,.75rem); letter-spacing: .2em;
       text-transform: uppercase; color: var(--mid);
       margin-bottom: 1rem; font-weight: 600;
     }
     .page-header h1 {
-      font-family: 'Outfit', 'SF Pro Display', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-      font-weight: 700;
-      font-size: clamp(2.2rem,6vw,3.8rem); 
-      letter-spacing: -.02em; 
-      line-height: 1.1; 
-      color: var(--ink); 
+      font-family: 'Syne', 'SF Pro Display', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-weight: 800;
+      font-size: clamp(2.5rem,8vw,5rem); letter-spacing: -.04em; line-height: .95;
+      color: var(--ink);
     }
     .page-header h1 .accent { color: var(--red); }
     .page-desc {
@@ -110,7 +84,9 @@
       color: var(--mid); max-width: 520px; line-height: 1.6;
     }
 
-    /* ── MAIN CONTENT ── */
+
+
+    /* MAIN */
     main {
       max-width: 1100px; margin: 0 auto;
       padding: clamp(2.5rem,6vw,4rem) clamp(1rem,4vw,2rem) clamp(4rem,8vw,6rem);
@@ -136,14 +112,12 @@
       border-bottom: 2px solid var(--ink);
     }
     .unit-num {
-      font-family: 'Outfit', 'SF Pro Display', 'PingFang SC', 'Microsoft YaHei', sans-serif; 
-      font-size: 1.4rem;
+      font-family: 'Syne', 'SF Pro Display', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 1.2rem;
       font-weight: 800; color: var(--red); opacity: .8; white-space: nowrap;
     }
     .unit-title {
-      font-family: 'Outfit', 'SF Pro Display', 'PingFang SC', 'Microsoft YaHei', sans-serif; 
-      font-weight: 700;
-      font-size: clamp(1.2rem,2.5vw,1.6rem); letter-spacing: -.02em;
+      font-family: 'Syne', 'SF Pro Display', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-weight: 700;
+      font-size: clamp(1.1rem,2.5vw,1.4rem); letter-spacing: -.02em;
     }
 
     /* CHAPTER BLOCK */
@@ -153,12 +127,12 @@
       display: flex; align-items: center; gap: .8rem; margin-bottom: .6rem;
     }
     .chapter-code {
-      font-family: 'DM Mono', monospace; font-size: .75rem;
+      font-family: 'DM Mono', monospace; font-size: .7rem;
       background: var(--faint); color: var(--mid);
       padding: .2rem .6rem; border-radius: 4px; white-space: nowrap;
       border: 1px solid var(--line);
     }
-    .chapter-title { font-size: .95rem; font-weight: 500; color: var(--mid); }
+    .chapter-title { font-size: .88rem; font-weight: 500; color: var(--mid); }
 
     /* GRAPH LIST */
     .graph-list { list-style: none; }
@@ -182,7 +156,7 @@
       padding: .15rem .45rem; border-radius: 3px;
       text-align: center; font-weight: 500;
     }
-    .graph-title { font-size: clamp(.9rem,2vw,1rem); font-weight: 400; }
+    .graph-title { font-size: clamp(.88rem,2vw,.97rem); font-weight: 400; }
     .graph-arrow {
       color: var(--red); font-size: .9rem;
       opacity: 0; transition: opacity .2s;
@@ -200,9 +174,6 @@
     footer a { color: var(--mid); text-decoration: none; transition: color .2s; }
     footer a:hover { color: var(--ink); }
 
-    @media (max-width: 768px) {
-      .page-header { padding-top: 2rem; padding-bottom: 2rem; }
-    }
     @media (max-width: 480px) {
       .graph-list li a { grid-template-columns: 2.4rem 1fr; }
       .graph-arrow { display: none; }
@@ -224,15 +195,17 @@
 <div class="page-header-wrap">
   <div class="page-header">
     <div class="breadcrumb">
-      <a class="back-btn" href="../index.html" data-i18n="backHome">⥃ Home</a>
-      <span class="sep">/</span>
-      <span class="folder-link" data-i18n="breadcrumbCurrent">AP Micro Graphs</span>
+      <a class="back-btn" href="../index.html" data-i18n="backHome">← Home</a>
+      <span style="color:var(--line);font-size:.9rem">/</span>
+      <span style="color:var(--mid);font-size:.85rem;font-weight:400" data-i18n="breadcrumbCurrent">AP Micro Graphs</span>
     </div>
-    <div class="page-eyebrow" data-i18n="eyebrow">Interactive Models</div>
-    <h1><span data-i18n="h1a"></span> <span class="accent" data-i18n="h1b"></span></h1>
+    <div class="page-eyebrow" data-i18n="eyebrow">AP Microeconomics · Interactive Models</div>
+    <h1><span data-i18n="h1a">AP Micro</span> <span class="accent" data-i18n="h1b">Graphs</span></h1>
     <p class="page-desc" data-i18n="pageDesc">Interactive models organized by unit and chapter. Click any graph to open it.</p>
   </div>
 </div>
+
+
 
 <main>
   <div id="status"><span class="spinner"></span> <span data-i18n="loading">Loading…</span></div>
@@ -250,22 +223,28 @@
 // ── Translations ──
 const T = {
   en: {
-    backHome:         '⥃ Back',
+    backHome:         '← Home',
     breadcrumbCurrent:'AP Micro Graphs',
-    eyebrow:          'Interactive Models',
-    h1a:              'AP Micro Graphs',
+    eyebrow:          'AP Microeconomics · Interactive Models',
+    h1a:              'AP Micro',
+    h1b:              'Graphs',
     pageDesc:         'Interactive models organized by unit and chapter. Click any graph to open it.',
+    ghLink:           'View folder on GitHub ↗',
     loading:          'Loading…',
+    openFolder:       'Open',
     footerCredit:     'Built with KineticGraphs by Chris Makler',
     errorMsg:         '⚠️ Could not load content.json — make sure it\'s uploaded to the same folder as this index.html.',
   },
   zh: {
-    backHome:         '⥃ 返回',
+    backHome:         '← 返回首页',
     breadcrumbCurrent:'AP微观经济图表',
-    eyebrow:          '互动图表模型',
-    h1a:              'AP微观经济图表',
+    eyebrow:          'AP微观经济学 · 互动图表模型',
+    h1a:              'AP微观',
+    h1b:              '图表',
     pageDesc:         '按单元与章节整理的互动图表模型，点击任意图表即可打开。',
+    ghLink:           '在 GitHub 上查看 ↗',
     loading:          '加载中…',
+    openFolder:       '打开',
     footerCredit:     '基于Chris Makler的KineticGraphs构建',
     errorMsg:         '⚠️ 无法加载 content.json，请确保该文件已上传至与 index.html 相同的文件夹中。',
   }
@@ -283,6 +262,12 @@ function render(lang) {
   document.getElementById('btn-en').classList.toggle('active', lang === 'en');
   document.getElementById('btn-zh').classList.toggle('active', lang === 'zh');
   document.documentElement.lang = lang === 'zh' ? 'zh' : 'en';
+
+  // Update stats bar if data is loaded
+  if (loadedData) {
+    document.getElementById('stats-label').innerHTML =
+      t.statsUnits(totalUnits, totalChapters, totalGraphs);
+  }
 
   // Re-render content with new language if data is loaded
   if (loadedData) {
@@ -305,8 +290,18 @@ function detectLang() {
   return nav.startsWith('zh') ? 'zh' : 'en';
 }
 
+// Parse a graph ID string like "3.2.G1.Total.Product.and.Marginal.Product"
+// Returns { label: "3.2.G1", title: "Total Product and Marginal Product" }
+function parseGraphId(id) {
+  const parts = id.split('.');
+  const gIndex = parts.findIndex(p => /^G\d+$/i.test(p));
+  if (gIndex < 0) return { label: id, title: id };
+  const label = parts[gIndex];                           // e.g. "G1"
+  const title = parts.slice(gIndex + 1).join(' ');      // e.g. "Total Product and Marginal Product"
+  return { label, title };
+}
+
 function buildContent(data, lang) {
-  const t = T[lang];
   const contentEl = document.getElementById('content');
   contentEl.innerHTML = '';
 
@@ -314,7 +309,6 @@ function buildContent(data, lang) {
     const unitDiv = document.createElement('div');
     unitDiv.className = 'unit-block';
 
-    // Support optional zh translations in JSON
     const unitTitle = (lang === 'zh' && unit.title_zh) ? unit.title_zh : unit.title;
 
     unitDiv.innerHTML = `
@@ -338,13 +332,14 @@ function buildContent(data, lang) {
       const ul = document.createElement('ul');
       ul.className = 'graph-list';
 
-      ch.graphs.forEach(graph => {
+      // graphs is now an array of ID strings e.g. "3.2.G1.Total.Product.and.Marginal.Product"
+      ch.graphs.forEach(graphId => {
+        const { label, title } = parseGraphId(graphId);
         const li = document.createElement('li');
-        const graphTitle = (lang === 'zh' && graph.title_zh) ? graph.title_zh : graph.title;
         li.innerHTML = `
-          <a href="${encodeURIComponent(graph.file)}">
-            <span class="graph-label">${graph.label}</span>
-            <span class="graph-title">${graphTitle}</span>
+          <a href="viewer.html?graph=${encodeURIComponent(graphId)}" target="_blank">
+            <span class="graph-label">${label}</span>
+            <span class="graph-title">${title}</span>
             <span class="graph-arrow">→</span>
           </a>`;
         ul.appendChild(li);
@@ -379,17 +374,15 @@ async function init() {
   }
 }
 
-// Fade in logic synchronized with the graphs page
-document.addEventListener('DOMContentLoaded', function() {
-    init();
-});
-
-document.fonts.ready.then(() => {
-    document.body.style.opacity = '1';
-});
-setTimeout(() => { document.body.style.opacity = '1'; }, 800);
-
+init();
 </script>
-
+<script>
+  // Show page only after fonts are ready — prevents flash of unstyled text
+  document.fonts.ready.then(() => {
+    document.body.style.opacity = '1';
+  });
+  // Fallback: show after 800ms in case Google Fonts is blocked or slow
+  setTimeout(() => { document.body.style.opacity = '1'; }, 800);
+</script>
 </body>
 </html>

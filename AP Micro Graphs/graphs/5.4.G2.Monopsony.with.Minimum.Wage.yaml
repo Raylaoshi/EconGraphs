@@ -116,7 +116,7 @@ layout:
             drag:
               - vertical: minimumWage
             label:
-              text: "`Wage_{MIN} = ${params.minimumWage.toFixed(0)}`"
+              text: "`W_{min} = ${params.minimumWage.toFixed(0)}`"
               x: 8
               position: l
 

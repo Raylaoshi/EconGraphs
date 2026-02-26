@@ -105,7 +105,7 @@ layout:
         # Equilibiurm Price Label
         - Label:
             coordinates: [0, calcs.ourEquilibrium.P]
-            text: "`W_{MKT} = ${calcs.ourEquilibrium.P.toFixed(1)}`"
+            text: "`W=${calcs.ourEquilibrium.P.toFixed(1)}`"
             color: grey
             position: r 
 

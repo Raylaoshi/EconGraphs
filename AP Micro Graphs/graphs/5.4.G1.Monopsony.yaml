@@ -158,7 +158,7 @@ layout:
             drag:
               - horizontal: L
             droplines:
-              horizontal: "`Wage = ${(calcs.laborSupply).toFixed(1)}`"
+              horizontal: "`W = ${(calcs.laborSupply).toFixed(1)}`"
         
         # Point on MRP_L curve
         - Point:

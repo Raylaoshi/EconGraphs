@@ -171,6 +171,7 @@
         main {
             max-width: 1100px; margin: 0 auto;
             padding: 0 clamp(1rem,4vw,2rem) clamp(4rem,8vw,6rem);
+            position: relative;
         }
 
         /* ── ERROR STATE ── */
@@ -179,15 +180,22 @@
             color: var(--red); font-size: .9rem; display: none;
         }
 
+        /* ── GRAPH WRAPPER (positions overlay) ── */
+        #kg-wrapper {
+            position: relative;
+            max-width: 1100px;
+            margin: 3rem 0 1rem 0;
+            border-radius: 12px;
+        }
+
         /* ── GRAPH CONTAINER ── */
         .kg-container {
-            max-width: 1100px;
-            margin: 3rem 0 0 0;
             background: #ffffff;
             border-radius: 12px;
             user-select: none;
             -webkit-user-select: none;
         }
+
         svg text { pointer-events: none; }
 
         /* force theme*/
@@ -233,23 +241,50 @@
             width: 100% !important;
         }
 
-        /* ── FOOTER ── */
-        .footer-wrap { border-top: 1px solid var(--line); background: #fff; }
-        footer {
-            max-width: 1100px; margin: 0 auto;
-            padding: clamp(1.5rem,3vw,2rem) clamp(1rem,4vw,2rem);
-            display: flex; flex-wrap: wrap; justify-content: space-between;
-            align-items: center; gap: 1rem; font-size: .8rem; color: var(--mid);
+        #rotate-overlay {
+            display: none;
+            position: absolute;
+            inset: 0;
+            z-index: 100;
+            background: rgba(5, 14, 60, 0.92);
+            color: #fff;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-family: 'Outfit', sans-serif;
+            padding: 2rem;
+            gap: 0.8rem;
+            border-radius: 12px;
         }
-        footer a { color: var(--mid); text-decoration: none; transition: color .2s; }
-        footer a:hover { color: var(--ink); }
+        #rotate-overlay.show { display: flex; }
+        #rotate-overlay .icon { font-size: 2.5rem; }
+        #rotate-overlay p { font-size: 0.9rem; line-height: 1.6; opacity: 0.85; margin: 0; }
+        #rotate-overlay .dismiss-btn {
+            margin-top: 0.8rem;
+            background: none;
+            border: 1px solid rgba(255,255,255,0.4);
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.78rem;
+            padding: 0.4rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        #rotate-overlay .dismiss-btn:hover { opacity: 1; }
 
-        @media (max-width: 768px) {
+        @media (max-width: 600px) {
             .page-header { padding-top: 2rem; }
-            .kg-container { margin-top: 2rem; }
-        }
+            .kg-container { margin-top: 2rem; 
+            /* Stack KG's layout vertically on narrow screens */
+            transform: none;
+            overflow-x: auto; /* allow horizontal scroll as last resort */
+            }}
     </style>
 </head>
+
 <body>
 
 <header class="topbar">
@@ -294,7 +329,15 @@
         │  guaranteed to already be present. Race condition = 0.  │
         └─────────────────────────────────────────────────────────┘
     -->
-    <div class="kg-container" id="kg-container"></div>
+    <div id="kg-wrapper">
+        <div id="rotate-overlay">
+            <div class="icon">⟳</div>
+            <p>Rotate to landscape for the best experience.</p>
+            <p><b>横屏效果更佳。</b></p>
+            <button class="dismiss-btn" id="dismiss-rotate">✖</button>
+        </div>
+        <div class="kg-container" id="kg-content"></div>
+    </div>
     <script>
         (function () {
             const graphId = new URLSearchParams(location.search).get('graph');
@@ -307,7 +350,7 @@
 
                 if (xhr.status === 200) {
                     // Inject stripped YAML — content is in DOM before DOMContentLoaded
-                    document.getElementById('kg-container').textContent = stripFrontMatter(xhr.responseText);
+                    document.getElementById('kg-content').textContent = stripFrontMatter(xhr.responseText);
                     // Store full text for metadata rendering in DOMContentLoaded below
                     window._kgYaml = xhr.responseText;
                 } else {
@@ -320,13 +363,6 @@
     </script>
 </main>
 
-<div class="footer-wrap">
-    <footer>
-        <span>AP.Econ.Graphs · <a href="https://github.com/Raylaoshi/AP.Econ.Graphs" target="_blank">github.com/Raylaoshi</a></span>
-        <span id="footer-credit">Built with KineticGraphs by Chris Makler</span>
-    </footer>
-</div>
-
 <script>
 // ── i18n & rendering — runs on DOMContentLoaded (after KG has already init'd) ──
 
@@ -337,10 +373,10 @@ const FOLDER_ZH = {
 };
 
 const UI = {
-    en: { back: '↖ Back',  footer: 'Built with KineticGraphs by Chris Makler',
+    en: { back: '↖ Back',
           errorNotFound: '⚠️ Graph not found. Make sure the .yaml file exists in graphs/',
           errorNoId:     '⚠️ No graph specified. Add ?graph=3.2.G1 to the URL.' },
-    zh: { back: '↖ 返回',  footer: '基于Chris Makler的KineticGraphs构建',
+    zh: { back: '↖ 返回', 
           errorNotFound: '⚠️ 找不到图像，请确认 .yaml 文件存在于 graphs/ 文件夹中。',
           errorNoId:     '⚠️ 未指定图像，请在 URL 中添加 ?graph=3.2.G1。' },
 };
@@ -352,7 +388,6 @@ function render(lang, meta) {
 
     // Static UI
     document.getElementById('back-btn').textContent      = UI[lang].back;
-    document.getElementById('footer-credit').textContent = UI[lang].footer;
 
     // Breadcrumb folder
     const parts = window.location.pathname.split('/');
@@ -404,12 +439,11 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!graphId) {
         document.getElementById('error-msg').textContent = UI[currentLang].errorNoId;
         document.getElementById('error-msg').style.display = 'block';
-        document.getElementById('kg-container').style.display = 'none';
-        render(currentLang, {});
+        document.getElementById('kg-wrapper').style.display = 'none';        render(currentLang, {});
     } else if (window._kgError) {
         document.getElementById('error-msg').textContent = UI[currentLang].errorNotFound;
         document.getElementById('error-msg').style.display = 'block';
-        document.getElementById('kg-container').style.display = 'none';
+        document.getElementById('kg-wrapper').style.display = 'none';
         render(currentLang, {});
     } else if (window._kgYaml) {
         // Parse metadata and render UI
@@ -420,7 +454,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // KG drag fix
-    const container = document.getElementById('kg-container');
+    const container = document.getElementById('kg-content');
     if (container) {
         container.addEventListener('mousedown', function (e) {
             if (e.target.closest('svg')) e.preventDefault();
@@ -433,6 +467,30 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
+
+let overlayDismissed = false;
+
+document.getElementById('dismiss-rotate').addEventListener('click', function() {
+    overlayDismissed = true;
+    document.getElementById('rotate-overlay').classList.remove('show');
+});
+
+function checkOrientation() {
+    if (overlayDismissed) return;
+    const overlay = document.getElementById('rotate-overlay');
+    const isPortrait = window.matchMedia('(orientation: portrait)').matches;
+    const isNarrow = window.innerWidth < 768;
+    const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    overlay.classList.toggle('show', isPortrait && isNarrow && isTouchDevice);
+}
+
+// Reset dismiss state when user rotates back to landscape
+window.matchMedia('(orientation: landscape)').addEventListener('change', function(e) {
+    if (e.matches) overlayDismissed = false;
+});
+
+window.addEventListener('resize', checkOrientation);
+checkOrientation();
 </script>
 
 </body>

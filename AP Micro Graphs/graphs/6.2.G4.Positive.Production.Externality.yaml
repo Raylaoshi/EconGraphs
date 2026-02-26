@@ -4,7 +4,33 @@ label: 6.2.G4
 eyebrow: Unit 6 — Market Failure and the Role of Government
 eyebrow_zh: 第六单元 — 市场失灵与政府治理
 description: |
+  <p>When production benefits bystanders — such as R&D spillovers — the <strong>Market Supply curve (MPC) overstates the true social cost</strong>. By comparing MSB and MSC at Q<sub>MKT</sub>, we see that MSB > MSC, indicating underproduction — the market quantity falls short of the socially optimal level (Q<sub>So</sub>).</p>
+  <strong>Interactive elements:</strong>
+  <ol>
+    <li><strong>MSC curve</strong> — drag up or down to change the Marginal External Benefit (MEB), and observe how the DWL and Q<sub>So</sub> shift accordingly.</li>
+    <li><strong>S<sub>Sub</sub> curve</strong> — drag  to simulate a producer subsidy, and observe how it narrows the gap between Q<sub>MKT</sub> and Q<sub>So</sub>.</li>
+  </ol>
+  <strong>Areas on the graph:</strong>
+  <ol>
+    <li><span style="color:#1F77B4">Blue area</span> — Realized external benefit at Q<sub>MKT</sub></li>
+    <li><span style="color:green">Green area</span> — Optimal external benefit at Q<sub>So</sub></li>
+    <li><span style="color:red">Red triangle</span> — Deadweight loss from underproduction</li>
+  </ol>
+  <p><strong>Policy tool:</strong> A subsidy equal to MEB shifts the supply curve down from MPC to MSC, moving the market to Q<sub>So</sub> and eliminating the DWL. Try setting Subsidy = MEB!</p>
 description_zh: |
+  <p>当生产活动使旁观者受益时——例如研发成果外溢——<strong>市场供给曲线（MPC）高估了真实的社会成本</strong>。通过观察 Q<sub>MKT</sub> 对应的 MSB 与 MSC 大小关系，我们得知社会边际收益较大（MSB > MSC），代表生产不足，导致市场产量低于社会最优水平（Q<sub>So</sub>）。</p>
+  <strong>可调节元素：</strong>
+  <ol>
+    <li><strong>MSC 曲线</strong> — 上下拖动可改变边际外部收益（MEB），观察无谓损失大小与社会最优点的变化。</li>
+    <li><strong>S<sub>Sub</sub> 曲线</strong> — 拖动模拟生产补贴，观察其如何缩小 Q<sub>MKT</sub> 与 Q<sub>So</sub> 之间的差距。</li>
+  </ol>
+  <strong>各区域含义：</strong>
+  <ol>
+    <li><span style="color:#1F77B4">蓝色区域</span> — Q<sub>MKT</sub> 处已实现的外部收益</li>
+    <li><span style="color:green">绿色区域</span> — Q<sub>So</sub> 处的最优外部收益</li>
+    <li><span style="color:red">红色三角</span> — 生产不足造成的无谓损失</li>
+  </ol>
+  <p><strong>政策工具：</strong>补贴额等于 MEB 时，供给曲线从 MPC 下移至 MSC，使市场均衡回到 Q<sub>So</sub>，消除无谓损失。试试将补贴调至等于 MEB！</p>
 
 schema: EconSchema
 params:
@@ -282,8 +308,3 @@ layout:
             - html: "`Current subsidy = $${params.subsidy.toFixed(0)}`"
             - html: "`Optimal subsidy = $${params.MEB.toFixed(0)}`"
             - html: "`Remaining underproduction = ${calcs.underproduction.toFixed(0)} units`"
-            - html: "<hr/><b>External Benefits:</b>"
-            - html: "<span style=\"color:#1F77B4\">Blue area</span> - Realized external benefit at Q<sub>MKT</sub>"
-            - html: "<span style=\"color:green\">Green area</span> - Optimal external benefit at Q<sub>So</sub>"
-            - html: "<span style=\"color:red\">Red triangle</span> - Deadweight loss from underproduction"
-            - html: "<hr/><i>Example - R&D spillovers. Set subsidy = MEB to eliminate DWL!</i>"

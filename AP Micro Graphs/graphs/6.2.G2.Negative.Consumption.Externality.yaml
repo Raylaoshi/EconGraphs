@@ -4,7 +4,33 @@ label: 6.2.G2
 eyebrow: Unit 6 — Market Failure and the Role of Government
 eyebrow_zh: 第六单元 — 市场失灵与政府治理
 description: |
+  <p>When consumption harms bystanders — such as smoking — the <strong>Market Demand curve (MPB) overstates the true social benefit</strong>. By comparing MSB and MSC at Q<sub>MKT</sub>, we see that MSC > MSB, indicating overconsumption — the market quantity exceeds the socially optimal level (Q<sub>So</sub>).</p>
+  <strong>Interactive elements:</strong>
+  <ol>
+    <li><strong>MSB curve</strong> — drag up or down to change the Marginal External Cost (MEC), and observe how the DWL and Q<sub>So</sub> shift accordingly.</li>
+    <li><strong>D<sub>Tax</sub> curve</strong> — drag upward to simulate a consumer tax, and observe how it narrows the gap between Q<sub>MKT</sub> and Q<sub>So</sub>.</li>
+  </ol>
+  <strong>Areas on the graph:</strong>
+  <ol>
+    <li><span style="color:orange">Orange area</span> — External cost incurred at Q<sub>MKT</sub></li>
+    <li><span style="color:green">Green area</span> — Tolerable external cost at Q<sub>So</sub></li>
+    <li><span style="color:red">Red triangle</span> — Deadweight loss from overconsumption</li>
+  </ol>
+  <p><strong>Policy tool:</strong> A tax equal to MEC shifts the demand curve down from MPB to MSB, moving the market to Q<sub>So</sub> and eliminating the DWL. Try setting Tax = MEC!</p>
 description_zh: |
+  <p>当消费活动对旁观者造成伤害时——例如吸烟——<strong>市场需求曲线（MPB）高估了真实的社会收益</strong>。通过观察 Q<sub>MKT</sub> 对应的 MSB 与 MSC 大小关系，我们得知社会边际成本较大（MSC > MSB），代表消费过度，导致市场产量超过社会最优水平（Q<sub>So</sub>）。</p>
+  <strong>可调节元素：</strong>
+  <ol>
+    <li><strong>MSB 曲线</strong> — 上下拖动可改变边际外部成本（MEC），观察无谓损失大小与社会最优点的变化。</li>
+    <li><strong>D<sub>Tax</sub> 曲线</strong> — 向上拖动模拟消费税，观察其如何缩小 Q<sub>MKT</sub> 与 Q<sub>So</sub> 之间的差距。</li>
+  </ol>
+  <strong>各区域含义：</strong>
+  <ol>
+    <li><span style="color:orange">橙色区域</span> — Q<sub>MKT</sub> 处产生的外部成本</li>
+    <li><span style="color:green">绿色区域</span> — Q<sub>So</sub> 处可容忍的外部成本</li>
+    <li><span style="color:red">红色三角</span> — 过度消费造成的无谓损失</li>
+  </ol>
+  <p><strong>政策工具：</strong>征收等于 MEC 的消费税，可将需求曲线从 MPB 下移至 MSB，使市场均衡回到 Q<sub>So</sub>，消除无谓损失。试试将税率调至等于 MEC！</p>
 
 schema: EconSchema
 params:
@@ -281,8 +307,3 @@ layout:
             - html: "`Current tax = $${params.tax.toFixed(0)}`"
             - html: "`Optimal tax = $${params.MEC.toFixed(0)}`"
             - html: "`Remaining overconsumption = ${calcs.overconsumption.toFixed(0)} units`"
-            - html: "`<hr/><b>External Costs:</b>`"
-            - html: "`<span style=\"color:orange\">Orange area</span> - External cost incurred at Q<sub>MKT</sub>`"
-            - html: "`<span style=\"color:green\">Green area</span> - Tolerable external cost at Q<sub>So</sub>`"
-            - html: "`<span style=\"color:red\">Red triangle</span> - Deadweight loss from overconsumption`"
-            - html: "`<hr/><i>Example - Smoking. Set tax = MEC to eliminate DWL!</i>`"

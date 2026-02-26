@@ -4,27 +4,25 @@ label: 5.4.G1
 eyebrow: Unit 5 — Factor Markets
 eyebrow_zh: 第五单元 — 要素市场
 description: |
-
-  <p>Drag the point along the Labor axis to explore how a monopsonist decides how much labor to hire and what wage to pay. Use the checkboxes to compare the monopsony outcome against perfect competition.</p>
-  <strong>Key features of a monopsony labor market:</strong>
+  <p>Drag the point along the Labor axis to explore how a monopsonist decides how much labor to hire and what wage to pay. Use the checkboxes to compare the monopsony outcome against the perfectly competitive benchmark.</p>
+  <strong>Key features of a monopsonistic labor market:</strong>
   <ol>
-      <li>The monopsonist faces an <strong>upward-sloping</strong> labor supply curve — to hire one more worker, it must raise wages for <strong>all</strong> existing workers, not just the new hire.</li>
-      <li>This makes the <strong>Marginal Factor Cost of Labor (MFC<sub>L</sub>)</strong> rise at <strong>twice the rate</strong> of the supply curve, lying above it at every quantity.</li>
-      <li>The <strong>Wage Raise</strong> arrow shows the additional wage cost paid to all existing workers when one more worker is hired — the gap between S<sub>L</sub> and MFC<sub>L</sub>.</li>
-      <li>The monopsonist maximizes profit by hiring where <strong>MFC<sub>L</sub> = MRP<sub>L</sub></strong>, then paying the wage read off the <strong>supply curve</strong> at that quantity — below MRP<sub>L</sub>.</li>
-      <li>Compared to a perfectly competitive labor market, monopsony results in <strong>fewer workers hired</strong> and <strong>lower wages</strong>, generating a <strong>deadweight loss</strong>.</li>
+    <li>A monopsonist faces an <strong>upward-sloping</strong> labor supply curve — hiring one more worker requires raising wages for <strong>all</strong> existing workers, not just the new hire.</li>
+    <li>This causes the <strong>Marginal Factor Cost (MFC<sub>L</sub>)</strong> to rise at <strong>twice the rate</strong> of the supply curve, sitting <strong>above</strong> it at every level of employment.</li>
+    <li>The <strong>wage markup</strong> arrow shows the extra wage cost paid to all existing workers when one additional worker is hired — the gap between S<sub>L</sub> and MFC<sub>L</sub>.</li>
+    <li>The monopsonist maximizes profit by hiring where <strong>MFC<sub>L</sub> = MRP<sub>L</sub></strong>, then reads the wage off the <strong>supply curve</strong> at that quantity — below the MRP<sub>L</sub>.</li>
+    <li>Compared to a perfectly competitive labor market, monopsony results in <strong>fewer workers hired</strong>, <strong>lower wages paid</strong>, and a <strong>deadweight loss</strong>.</li>
   </ol>
 
 description_zh: |
-
-  <p>沿劳动力轴拖动端点，探索买方垄断者如何决定雇用多少劳动力及支付多少工资。使用复选框将买方垄断结果与完全竞争结果进行比较。</p>
-  <strong>买方垄断劳动力市场的关键特征：</strong>
+  <p>沿劳动力轴拖动端点，看看买方垄断者如何拍板——雇多少人、给多少钱。勾选复选框，把买方垄断的结果和完全竞争摆在一起对比。</p>
+  <strong>买方垄断劳动力市场的核心逻辑：</strong>
   <ol>
-      <li>买方垄断者面对一条<strong>向上倾斜</strong>的劳动力供给曲线——每多雇一名工人，必须为<strong>所有</strong>现有工人提高工资，而不仅仅是新雇员。</li>
-      <li>这使得<strong>边际要素成本（MFC<sub>L</sub>）</strong>的上升速度是供给曲线的<strong>两倍</strong>，在每个产量水平上均位于供给曲线<strong>上方</strong>。</li>
-      <li><strong>工资提升</strong>箭头显示了多雇一名工人时，支付给所有现有工人的额外工资成本——即S<sub>L</sub>与MFC<sub>L</sub>之间的差距。</li>
-      <li>买方垄断者通过在<strong>MFC<sub>L</sub> = MRP<sub>L</sub></strong>处雇用劳动力来实现利润最大化，然后从该产量对应的<strong>供给曲线</strong>上确定工资——低于MRP<sub>L</sub>。</li>
-      <li>与完全竞争劳动力市场相比，买方垄断导致<strong>雇用工人更少</strong>、<strong>工资更低</strong>，并产生<strong>无谓损失</strong>。</li>
+    <li>买方垄断者面对一条<strong>向上倾斜</strong>的劳动力供给曲线——每多招一个人，就得给<strong>所有</strong>在职员工涨工资，而不只是新来的那一个。</li>
+    <li>正因如此，<strong>边际要素成本（MFC<sub>L</sub>）</strong>的上涨速度是供给曲线的<strong>两倍</strong>，在任何雇用水平上都悬在供给曲线<strong>上方</strong>。</li>
+    <li><strong>工资溢价</strong>箭头直观呈现了多雇一人时，老员工那部分额外工资的代价——也就是 S<sub>L</sub> 与 MFC<sub>L</sub> 之间的那段距离。</li>
+    <li>买方垄断者在 <strong>MFC<sub>L</sub> = MRP<sub>L</sub></strong> 处确定雇用量，再从该数量对应的<strong>供给曲线</strong>上找到工资——刻意压在 MRP<sub>L</sub> 以下。</li>
+    <li>和完全竞争劳动力市场相比，买方垄断的结果是：<strong>雇的人更少、工资更低</strong>，还白白制造了一块<strong>无谓损失</strong>。</li>
   </ol>
 
 schema: EconSchema
@@ -192,7 +190,6 @@ layout:
             show: ((params.L) > 0 && (params.L) <= calcs.monopsonyL)            
             label:
               text: "`Marginal \\\\ Profit`"
-              position: r
               fontSize: 9
               bgcolor: none
 
@@ -206,7 +203,6 @@ layout:
             double: true
             label:
               text: "`Wage \\\\ Raise`"
-              position: r
               fontSize: 9
               bgcolor: none
         
@@ -259,4 +255,3 @@ layout:
             - html: "`MFC<sub>L</sub>: <b>$${calcs.MFCL.toFixed(1)}</b>`"
             - html: "`Wage (S<sub>L</sub>): <b>$${calcs.laborSupply.toFixed(1)}</b>`"            
             - html: "`Worker Raise: <b>$${calcs.WageRaise.toFixed(1)}</b>`"
-            - html: "`Monopsony hires fewer workers at lower wages, creating deadweight loss.`"

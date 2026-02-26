@@ -4,7 +4,35 @@ label: 5.4.G2
 eyebrow: Unit 5 — Factor Markets
 eyebrow_zh: 第五单元 — 要素市场
 description: |
+  <p>In an unregulated monopsony, the firm hires at <strong>L<sub>M</sub> = 4, W<sub>M</sub> = $100</strong> — fewer workers at lower wages than the competitive benchmark (L<sub>C</sub> = 6, W<sub>C</sub> = $150). A minimum wage changes the firm's MFC<sub>L</sub> curve and can correct this inefficiency.</p>
+  <strong>The kinked MFC<sub>L</sub> curve — how it works:</strong>
+  <ol>
+    <li><strong>Horizontal section (red)</strong> — up to the kink point, the firm must pay every worker the minimum wage. MFC<sub>L</sub> = W<sub>min</sub>, flat and constant.</li>
+    <li><strong>Vertical jump at the kink</strong> — at the point where W<sub>min</sub> meets the original supply curve, hiring one more worker requires raising wages to attract new labor, so MFC<sub>L</sub> jumps vertically and rejoins the original curve. This is the crux of the kinked MFC<sub>L</sub> and the trickiest part of monopsony analysis.</li>
+    <li><strong>Upward-sloping section (red)</strong> — beyond the kink, the minimum wage is no longer binding and MFC<sub>L</sub> reverts to its original slope.</li>
+  </ol>
+  <strong>Three stages of minimum wage effect:</strong>
+  <ol>
+    <li><strong>W<sub>min</sub> &lt; $100</strong> — below the monopsony wage, the minimum wage is not binding. The firm stays at L = 4, W = $100. No effect.</li>
+    <li><strong>$100 &lt; W<sub>min</sub> &lt; $150</strong> — the uniquely monopsonistic result: minimum wage <em>increases both wages and employment</em> simultaneously, moving the firm toward the competitive outcome.</li>
+    <li><strong>W<sub>min</sub> &gt; $150</strong> — above the competitive wage, employment falls below L<sub>C</sub> = 6. The minimum wage now causes unemployment, as in a competitive market.</li>
+  </ol>
+  <p><strong>Interactive element:</strong> Drag the <strong>W<sub>min</sub> line</strong> up and down to move through all three stages and observe how the new MFC<sub>L</sub> intersection with MRP<sub>L</sub> shifts.</p>
 description_zh: |
+  <p>在没有管制的买方垄断市场里，企业只雇用 <strong>L<sub>M</sub> = 4 人，工资压在 W<sub>M</sub> = $100</strong>——比完全竞争的结果（L<sub>C</sub> = 6，W<sub>C</sub> = $150）少雇人、少付钱。最低工资立法改变了企业面对的 MFC<sub>L</sub> 曲线形状，有可能从根本上纠正这种剥削。</p>
+  <strong>为什么 MFC<sub>L</sub> 曲线会出现折角？</strong>
+  <ol>
+    <li><strong>水平段（红色）</strong> — 雇人数量未超过最低工资对应的供给量前，每多雇一人的成本就是 W<sub>min</sub>，固定不变，所以是水平线。</li>
+    <li><strong>折点处的跳跃</strong> — 当雇用量恰好达到最低工资与供给曲线的交点时，则需要涨工资才能吸引人才，因此MFC<sub>L</sub> 会垂直跳升，并且回归原曲线——这是折角形成的关键，也是买方垄断分析的难点所在。</li>
+    <li><strong>向上倾斜段（红色）</strong> — 超过折点后，最低工资不再起约束作用，MFC<sub>L</sub> 回到原来的斜率继续上升。</li>
+  </ol>
+  <strong>最低工资的三种不同结局：</strong>
+  <ol>
+    <li><strong>W<sub>min</sub> &lt; $100</strong> — 连垄断工资都没超过，政策形同虚设，企业照旧压在 L = 4，W = $100。</li>
+    <li><strong>$100 &lt; W<sub>min</sub> &lt; $150</strong> — 买方垄断最反直觉的结论：工资涨了，就业也跟着增加，两者同时改善，市场向竞争性均衡靠拢。这在完全竞争市场里绝不会发生。</li>
+    <li><strong>W<sub>min</sub> &gt; $150</strong> — 超过竞争性工资后，就业量开始下滑，最低工资反而制造失业，与一般竞争性劳动市场的逻辑相同。</li>
+  </ol>
+  <p><strong>可调节元素：</strong>拖动 <strong>W<sub>min</sub> 线</strong>，亲自看看那这三个阶段，观察折线形 MFC<sub>L</sub> 与 MRP<sub>L</sub> 交点如何随之移动。</p>
 
 schema: EconSchema
 params:
@@ -224,4 +252,3 @@ layout:
             - html: "`<hr/><b>Competitive Benchmark:</b>`"
             - html: "`Labor: <b>L<sub>C</sub> = 6</b>`"
             - html: "`Wage: <b>W<sub>C</sub> = $150</b>`"
-            - html: "`<hr/><i>In monopsony, minimum wage can increase both wages AND employment (up to competitive level).</i>`"

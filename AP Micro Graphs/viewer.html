@@ -171,7 +171,6 @@
         main {
             max-width: 1100px; margin: 0 auto;
             padding: 0 clamp(1rem,4vw,2rem) clamp(4rem,8vw,6rem);
-            position: relative;
         }
 
         /* ── ERROR STATE ── */
@@ -180,22 +179,15 @@
             color: var(--red); font-size: .9rem; display: none;
         }
 
-        /* ── GRAPH WRAPPER (positions overlay) ── */
-        #kg-wrapper {
-            position: relative;
-            max-width: 1100px;
-            margin: 3rem 0 1rem 0;
-            border-radius: 12px;
-        }
-
         /* ── GRAPH CONTAINER ── */
         .kg-container {
+            max-width: 1100px;
+            margin: 3rem 0 2rem 0;
             background: #ffffff;
             border-radius: 12px;
             user-select: none;
             -webkit-user-select: none;
         }
-
         svg text { pointer-events: none; }
 
         /* force theme*/
@@ -228,7 +220,6 @@
         .slider-numberInput {
             font-size: 0.9rem !important;
             font-family: 'Outfit', sans-serif !important;
-           
         }
 
         /* Checkbox label (has a class) */
@@ -241,50 +232,47 @@
             width: 100% !important;
         }
 
-        #rotate-overlay {
+        #rotate-hint {
             display: none;
-            position: absolute;
-            inset: 0;
-            z-index: 100;
-            background: rgba(5, 14, 60, 0.92);
-            color: #fff;
-            flex-direction: column;
+            margin-top: 1.5rem;
+            padding: 0.75rem 1.2rem;
+            background: linear-gradient(135deg, #f8f7ff 0%, var(--faint) 100%);
+            border: 1px solid var(--line);
+            border-left: 3px solid var(--ink);
+            border-radius: 8px;
+            font-size: 0.8rem;
+            color: var(--mid);
+            display: none;
             align-items: center;
-            justify-content: center;
-            text-align: center;
-            font-family: 'Outfit', sans-serif;
-            padding: 2rem;
-            gap: 0.8rem;
-            border-radius: 12px;
+            gap: 0.75rem;
         }
-        #rotate-overlay.show { display: flex; }
-        #rotate-overlay .icon { font-size: 2.5rem; }
-        #rotate-overlay p { font-size: 0.9rem; line-height: 1.6; opacity: 0.85; margin: 0; }
-        #rotate-overlay .dismiss-btn {
-            margin-top: 0.8rem;
-            background: none;
-            border: 1px solid rgba(255,255,255,0.4);
-            color: #fff;
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.78rem;
-            padding: 0.4rem 1rem;
-            border-radius: 6px;
-            cursor: pointer;
-            opacity: 0.7;
-            transition: opacity 0.2s;
+        #rotate-hint.show { display: flex; }
+        #rotate-hint .hint-icon {
+            font-size: 1.3rem;
+            animation: rotate-nudge 2s ease-in-out infinite;
+            flex-shrink: 0;
         }
-        #rotate-overlay .dismiss-btn:hover { opacity: 1; }
+        #rotate-hint .hint-text { line-height: 1.5; }
+        #rotate-hint .hint-text strong {
+            display: block;
+            font-size: 0.82rem;
+            color: var(--ink);
+            font-weight: 600;
+            margin-bottom: 0.1rem;
+        }
+
+        @keyframes rotate-nudge {
+            0%, 100% { transform: rotate(0deg); }
+            30%       { transform: rotate(90deg); }
+            60%       { transform: rotate(90deg); }
+        }
 
         @media (max-width: 600px) {
             .page-header { padding-top: 2rem; }
-            .kg-container { margin-top: 2rem; 
-            /* Stack KG's layout vertically on narrow screens */
-            transform: none;
-            overflow-x: auto; /* allow horizontal scroll as last resort */
-            }}
+            .kg-container { margin-top: 2rem; }            
+        }
     </style>
 </head>
-
 <body>
 
 <header class="topbar">
@@ -313,6 +301,14 @@
 </div>
 
 <main>
+    <div id="rotate-hint">
+        <div class="hint-icon">📱</div>
+        <div class="hint-text">
+            <strong id="rotate-hint-title"></strong>
+            <span id="rotate-hint-body"></span>
+        </div>
+    </div>
+
     <div class="error-msg" id="error-msg"></div>
 
     <!--
@@ -329,15 +325,7 @@
         │  guaranteed to already be present. Race condition = 0.  │
         └─────────────────────────────────────────────────────────┘
     -->
-    <div id="kg-wrapper">
-        <div id="rotate-overlay">
-            <div class="icon">⟳</div>
-            <p>Rotate to landscape for the best experience.</p>
-            <p><b>横屏效果更佳。</b></p>
-            <button class="dismiss-btn" id="dismiss-rotate">✖</button>
-        </div>
-        <div class="kg-container" id="kg-content"></div>
-    </div>
+    <div class="kg-container" id="kg-container"></div>
     <script>
         (function () {
             const graphId = new URLSearchParams(location.search).get('graph');
@@ -350,7 +338,7 @@
 
                 if (xhr.status === 200) {
                     // Inject stripped YAML — content is in DOM before DOMContentLoaded
-                    document.getElementById('kg-content').textContent = stripFrontMatter(xhr.responseText);
+                    document.getElementById('kg-container').textContent = stripFrontMatter(xhr.responseText);
                     // Store full text for metadata rendering in DOMContentLoaded below
                     window._kgYaml = xhr.responseText;
                 } else {
@@ -413,6 +401,12 @@ function render(lang, meta) {
     document.getElementById('btn-en').classList.toggle('active', lang === 'en');
     document.getElementById('btn-zh').classList.toggle('active', lang === 'zh');
     document.documentElement.lang = lang === 'zh' ? 'zh' : 'en';
+
+    // Rotation hint
+    document.getElementById('rotate-hint-title').textContent =
+        lang === 'zh' ? '横屏效果更佳' : 'Rotate for best experience';
+    document.getElementById('rotate-hint-body').textContent =
+        lang === 'zh' ? '请用手机浏览器，微信无法横屏' : 'This graph is designed for landscape view.';
 }
 
 function setLang(lang) {
@@ -439,11 +433,12 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!graphId) {
         document.getElementById('error-msg').textContent = UI[currentLang].errorNoId;
         document.getElementById('error-msg').style.display = 'block';
-        document.getElementById('kg-wrapper').style.display = 'none';        render(currentLang, {});
+        document.getElementById('kg-container').style.display = 'none';
+        render(currentLang, {});
     } else if (window._kgError) {
         document.getElementById('error-msg').textContent = UI[currentLang].errorNotFound;
         document.getElementById('error-msg').style.display = 'block';
-        document.getElementById('kg-wrapper').style.display = 'none';
+        document.getElementById('kg-container').style.display = 'none';
         render(currentLang, {});
     } else if (window._kgYaml) {
         // Parse metadata and render UI
@@ -454,7 +449,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // KG drag fix
-    const container = document.getElementById('kg-content');
+    const container = document.getElementById('kg-container');
     if (container) {
         container.addEventListener('mousedown', function (e) {
             if (e.target.closest('svg')) e.preventDefault();
@@ -468,29 +463,17 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-let overlayDismissed = false;
-
-document.getElementById('dismiss-rotate').addEventListener('click', function() {
-    overlayDismissed = true;
-    document.getElementById('rotate-overlay').classList.remove('show');
-});
-
 function checkOrientation() {
-    if (overlayDismissed) return;
-    const overlay = document.getElementById('rotate-overlay');
+    const hint = document.getElementById('rotate-hint');
     const isPortrait = window.matchMedia('(orientation: portrait)').matches;
     const isNarrow = window.innerWidth < 768;
     const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-    overlay.classList.toggle('show', isPortrait && isNarrow && isTouchDevice);
+    hint.classList.toggle('show', isPortrait && isNarrow && isTouchDevice);
 }
-
-// Reset dismiss state when user rotates back to landscape
-window.matchMedia('(orientation: landscape)').addEventListener('change', function(e) {
-    if (e.matches) overlayDismissed = false;
-});
 
 window.addEventListener('resize', checkOrientation);
 checkOrientation();
+
 </script>
 
 </body>

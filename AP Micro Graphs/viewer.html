@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>AP.Econ.Graphs</title>
 
     <!-- Fonts -->
@@ -101,6 +101,8 @@
             padding: 0 clamp(1rem,4vw,2rem); height: 64px;
             border-bottom: 1px solid var(--line);
             background: rgba(252,251,249,.95); backdrop-filter: blur(12px);
+            padding-top: env(safe-area-inset-top);
+            height: calc(64px + env(safe-area-inset-top));
         }
         .logo {
             font-family: 'Syne', 'SF Pro Display', 'PingFang SC', sans-serif;

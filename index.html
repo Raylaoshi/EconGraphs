@@ -142,10 +142,12 @@
       font-size: 1rem; margin-bottom: 1.5rem; letter-spacing: -.01em;
     }
     .modal-label .wechat-name { color: #07c160; }
-    .modal-qr {
-      width: 100%; border-radius: 8px;
-      display: block; margin: 0 auto;
-      border: 1px solid var(--line);
+    .qr-image {
+    width: 100%;
+    max-width: 160px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
     }
     .modal-hint {
       margin-top: 1.2rem; font-size: .85rem; color: var(--mid); line-height: 1.5; font-weight: 500;
@@ -416,7 +418,8 @@ document.addEventListener('DOMContentLoaded', function() {
   <div class="modal-box">
     <button class="modal-close" onclick="closeWechat()" aria-label="Close">×</button>
     <div class="modal-label"><span data-i18n="wechatAddMe"></span><span class="wechat-name" data-i18n="wechatName"></span></div>
-<img src="https://raylaoshi.github.io/assets/images/wechat-qr.png" alt="WeChat QR Code">    <p class="modal-hint" data-i18n="modalHint">Open WeChat → Scan QR code</p>
+    <img src="https://raylaoshi.github.io/assets/images/wechat-qr.png" alt="WeChat QR Code" class="qr-image">
+    <p class="modal-hint" data-i18n="modalHint">Open WeChat → Scan QR code</p>
   </div>
 </div>
 
